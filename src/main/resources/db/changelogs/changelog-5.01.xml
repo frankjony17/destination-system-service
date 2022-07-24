@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="5.01.01" author="rogerio.feitoza">
+        <dropColumn tableName="tb_destinacao" schemaName="destinacao">
+            <column name="ds_finalidade"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5.01.02" author="haillanderson.silva">
+        <dropColumn tableName="tb_licitacao" schemaName="destinacao">
+            <column name="nu_edital"/>
+            <column name="nu_pagina"/>
+            <column name="nu_secao"/>
+            <column name="dt_publicacao"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5.01.03" author="haillanderson.silva">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_licitacao_arquivo" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_licitacao_arquivo" schemaName="destinacao">
+            <column name="id_licitacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_arquivo" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_licitacao_arquivo"
+                baseColumnNames="id_licitacao"
+                constraintName="fk_licitacao_arquivo"
+                referencedTableName="tb_licitacao"
+                referencedColumnNames="id_licitacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_licitacao_arquivo"
+                baseColumnNames="id_arquivo"
+                constraintName="fk_arquivo_licitacao"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+    </changeSet>
+
+    <changeSet id="5.01.04" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_tipo_utilizacao">
+            <column name="ds_tipo_utilizacao" type="varchar(255)" value="Sem informação"/>
+            <where>id_tipo_utilizacao = '2'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.05" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_tipo_utilizacao">
+            <column name="ds_tipo_utilizacao" type="varchar(255)" value="Sem utilização definida"/>
+            <where>id_tipo_utilizacao = '3'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.06" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_sub_tipo_utilizacao">
+            <column name="ds_sub_tipo_utilizacao" type="varchar(255)" value="Delegacia/Presídio"/>
+            <where>id_sub_tipo_utilizacao = '5'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.07" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_sub_tipo_utilizacao">
+            <column name="ds_sub_tipo_utilizacao" type="varchar(255)" value="Ponte/Passarela/Viaduto"/>
+            <where>id_sub_tipo_utilizacao = '25'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.08" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_sub_tipo_utilizacao">
+            <column name="ds_sub_tipo_utilizacao" type="varchar(255)" value="Sem informação"/>
+            <where>id_sub_tipo_utilizacao = '28'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.09" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_sub_tipo_utilizacao">
+            <column name="ds_sub_tipo_utilizacao" type="varchar(255)" value="Sem informação"/>
+            <where>id_sub_tipo_utilizacao = '33'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.10" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_sub_tipo_utilizacao">
+            <column name="ds_sub_tipo_utilizacao" type="varchar(255)" value="Sem informação"/>
+            <where>id_sub_tipo_utilizacao = '55'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.11" author="haillanderson.silva">
+        <addColumn tableName="tb_tipo_utilizacao" schemaName="destinacao">
+            <column name="ic_ativo" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="5.01.12" author="haillanderson.silva">
+        <addColumn tableName="tb_sub_tipo_utilizacao" schemaName="destinacao">
+            <column name="ic_ativo" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="5.01.13" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_tipo_utilizacao">
+            <column name="ic_ativo" type="boolean" value="false"/>
+            <where>id_tipo_utilizacao = '2'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.14" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_tipo_utilizacao">
+            <column name="ic_ativo" type="boolean" value="true"/>
+            <where>id_tipo_utilizacao != '2'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.15" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_sub_tipo_utilizacao">
+            <column name="ic_ativo" type="boolean" value="false"/>
+            <where>id_sub_tipo_utilizacao in (5,25,28,33,55)</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.16" author="haillanderson.silva">
+        <update schemaName="destinacao"
+                tableName="tb_sub_tipo_utilizacao">
+            <column name="ic_ativo" type="boolean" value="true"/>
+            <where>id_sub_tipo_utilizacao not in (5,25,28,33,55)</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="5.01.17" author="rogerio.feitoza">
+        <renameColumn schemaName="destinacao" tableName="tb_encargo" columnDataType="boolean"
+                      oldColumnName="ic_prazo_indeterminado" newColumnName="ic_cumprimento_encargo"/>
+    </changeSet>
+
+    <changeSet id="5.01.18" author="diego.alves">
+        <addColumn tableName="tb_destinacao_imovel" schemaName="destinacao">
+            <column name="ic_ultima_destinacao" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="5.01.19" author="diego.alves">
+        <sql>
+            update destinacao.tb_destinacao_imovel as d
+                set ic_ultima_destinacao = false
+            where d.ic_ultima_destinacao is null
+                and d.nu_codigo_utilizacao = '0000'
+                and d.co_imovel =
+                (select co_imovel from destinacao.tb_destinacao_imovel as di
+                    where di.co_imovel = d.co_imovel
+                    group by co_imovel
+                    having count(1) > 1
+                )
+        </sql>
+    </changeSet>
+
+    <changeSet id="5.01.20" author="diego.alves">
+        <sql>
+            update destinacao.tb_destinacao_imovel as d
+                set ic_ultima_destinacao = true
+            where d.ic_ultima_destinacao is null
+                and d.nu_codigo_utilizacao != '0000'
+                and d.co_imovel =
+                (select co_imovel from destinacao.tb_destinacao_imovel as di
+                    where di.co_imovel = d.co_imovel
+                    group by co_imovel
+                    having count(1) > 1
+                )
+        </sql>
+    </changeSet>
+
+    <changeSet id="5.01.21" author="diego.alves">
+        <sql>
+            update destinacao.tb_destinacao_imovel as d
+                set ic_ultima_destinacao = true
+            where d.ic_ultima_destinacao is null
+                and d.nu_codigo_utilizacao = '0000'
+                and d.co_imovel =
+                (select co_imovel from destinacao.tb_destinacao_imovel as di
+                    where di.co_imovel = d.co_imovel
+                    group by co_imovel
+                    having count(1) = 1
+                )
+        </sql>
+    </changeSet>
+
+    <changeSet id="5.01.22" author="diego.alves">
+        <addColumn tableName="tb_destinacao" schemaName="destinacao">
+            <column name="co_contrato" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao"
+                baseColumnNames="co_contrato"
+                constraintName="fk_destinacao_contrato"
+                referencedTableName="tb_contrato"
+                referencedColumnNames="id_contrato"/>
+    </changeSet>
+
+    <changeSet id="5.01.23" author="diego.alves">
+        <sql>
+            update destinacao.tb_destinacao set co_contrato = resultado.id_contrato
+                from (SELECT * FROM
+                        destinacao.tb_contrato AS contrato
+                        left join destinacao.tb_doacao AS doacao on (contrato.id_contrato = doacao.co_contrato)
+                        left join destinacao.tb_venda AS venda on (contrato.id_contrato = venda.co_contrato)
+                        left join destinacao.tb_cuem AS cuem on (contrato.id_contrato = cuem.co_contrato)
+                        left join destinacao.tb_cdru AS cdru on (contrato.id_contrato = cdru.co_contrato)
+                        left join destinacao.tb_cessao_gratuita AS cessaoGratuita on (contrato.id_contrato = cessaoGratuita.co_contrato)
+                        left join destinacao.tb_termo_entrega AS termoEntrega on (contrato.id_contrato = termoEntrega.co_contrato)) as resultado
+                WHERE id_destinacao
+            IN(resultado.id_venda, resultado.id_doacao, resultado.id_cuem, resultado.id_cdru, resultado.id_cessao_gratuita, resultado.id_termo_entrega);
+        </sql>
+    </changeSet>
+
+    <changeSet id="5.01.24" author="diego.alves">
+        <dropColumn tableName="tb_venda" schemaName="destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5.01.25" author="diego.alves">
+        <dropColumn tableName="tb_doacao" schemaName="destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5.01.26" author="diego.alves">
+        <dropColumn tableName="tb_cuem" schemaName="destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5.01.27" author="diego.alves">
+        <dropColumn tableName="tb_cdru" schemaName="destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5.01.28" author="diego.alves">
+        <dropColumn tableName="tb_cessao_gratuita" schemaName="destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5.01.29" author="diego.alves">
+        <dropColumn tableName="tb_termo_entrega" schemaName="destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+</databaseChangeLog>

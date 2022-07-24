@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="antonio.souza" id="1.06.01">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_uso_proprio_aud">
+            <column name="ds_observacao" type="varchar(2000)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="diego.alves" id="1.06.02">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_encargo_aud">
+            <column name="ic_utilizar_data_contrato" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="diego.alves" id="1.06.03">
+        <modifyDataType columnName="nu_fracao_ideal"
+                        newDataType="number"
+                        schemaName="aud_destinacao"
+                        tableName="tb_destinacao_imovel_aud"/>
+    </changeSet>
+
+    <changeSet id="1.06.04" author="giovane.oliveira">
+        <dropTable tableName="tb_certidao_cartorial_aud" schemaName="aud_destinacao"/>
+    </changeSet>
+
+
+    <changeSet author="giovane.oliveira" id="1.06.05">
+        <dropColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="co_certidao_cartorial"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.06.06" author="giovane.oliveira">
+        <createTable schemaName="aud_destinacao"  tableName="tb_instituicao_financeira_aud">
+            <column name="id_instituicao_financeira" type="bigint"/>
+            <column name="ds_instituicao_financeira" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.06.07" author="antonio.souza">
+        <createTable tableName="tb_ato_autorizativo_aud" schemaName="aud_destinacao">
+            <column name="id_ato_autorizativo" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_tp_ato_autorizativo" type="bigint"/>
+            <column name="nu_ato" type="bigint"/>
+            <column name="dt_publicacao" type="date"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_ato_autorizativo_aud" columnNames="id_ato_autorizativo, rev" constraintName="pk_ato_autorizativo" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_ato_autorizativo_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"
+        />
+
+    </changeSet>
+
+    <changeSet id="1.06.08" author="antonio.souza">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_termo_entrega_aud">
+            <column name="co_ato_autorizativo" type="bigint"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.06.09" author="diego.alves">
+        <dropColumn tableName="tb_termo_entrega_aud"
+                    schemaName="aud_destinacao">
+            <column name="co_extrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.06.10" author="diego.alves">
+        <dropTable tableName="tb_extrato_aud"
+                   schemaName="aud_destinacao"/>
+    </changeSet>
+
+    <changeSet id="1.06.11" author="haillanderson.silva">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_financeiro_aud">
+            <column name="co_instituicao_financeira" type="bigint"/>
+            <column name="ic_fonte_recursos" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

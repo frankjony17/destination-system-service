@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.11.01" author="rogerio.feitoza">
+        <createTable tableName="tb_afetacao_aud" schemaName="aud_destinacao">
+            <column name="id_afetacao" type="bigint"/>
+            <column name="co_tipo_afetacao" type="bigint"/>
+            <column name="co_tipo_acao" type="bigint"/>
+            <column name="ds_especificar" type="varchar(255)"/>
+            <column name="dt_prazo_reserva" type="date"/>
+            <column name="co_tipo_ato" type="bigint"/>
+            <column name="nu_numero_ato" type="bigint"/>
+            <column name="dt_data_ato" type="date"/>
+            <column name="ic_publicado" type="boolean"/>
+            <column name="ds_pagina" type="varchar(255)"/>
+            <column name="ds_secao" type="varchar(255)"/>
+            <column name="dt_publicacao" type="date"/>
+            <column name="ic_imovel" type="boolean"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+        <addPrimaryKey schemaName="aud_destinacao"
+                       tableName="tb_afetacao_aud"
+                       columnNames="id_afetacao, rev"
+                       constraintName="pk_afetacao" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_afetacao_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    
+
+</databaseChangeLog>

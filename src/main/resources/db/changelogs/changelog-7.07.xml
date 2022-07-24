@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="7.07.01" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_permissao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="10"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_CESSAO_GRATUITA"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="11"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_DOACAO"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="12"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_VENDA"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="13"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_POSSE_INFORMAL"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="14"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_CUEM"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="15"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_CDRU"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="16"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_TERMO_ENTREGA"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="17"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_USO_PROPRIO"/>
+        </insert>
+
+        <insert tableName="tb_permissao">
+            <column name="id_permissao" value="18"/>
+            <column name="ds_permissao" value="DESTINACAO_CANCELAR_PERMISSAO_USO_IMOVEL_FUNCIONAL"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="7.07.02" author="rogerio.feitoza">
+        <preConditions>
+            <tableExists tableName="tb_permissao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="19"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_CESSAO_GRATUITA"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="20"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_DOACAO"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="21"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_VENDA"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="22"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_POSSE_INFORMAL"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="23"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_CUEM"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="24"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_CDRU"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="25"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_TERMO_ENTREGA"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="26"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_USO_PROPRIO"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="27"/>
+            <column name="ds_permissao" value="DESTINACAO_DESPACHO_CANCELAR_PERMISSAO_USO_IMOVEL_FUNCIONAL"/>
+        </insert>
+    </changeSet>
+    
+    <changeSet id="7.07.03" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_permissao_pendencia"/>
+        </preConditions>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="9"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="10"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="11"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="12"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="13"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="14"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="15"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="16"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="17"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="18"/>
+            <column name="id_pendencia" value="5"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="19"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="20"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="21"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="22"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="23"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="24"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="25"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="26"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="27"/>
+            <column name="id_pendencia" value="6"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="7.07.04" author="rogerio.feitoza">
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 10</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 11</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 12</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 13</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 14</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 15</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 16</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 17</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="6"/>
+            <where>id_permissao = 18</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 19</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 20</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 21</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 22</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 23</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 24</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 25</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 26</where>
+        </update>
+
+        <update tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="5"/>
+            <where>id_permissao = 27</where>
+        </update>
+    </changeSet>
+
+
+</databaseChangeLog>
+

@@ -1,0 +1,4 @@
+Área do terreno a partir de levantamento físico-cadastral, coordenadas (x, y):
+#foreach( $coordenada in $geometry.coordinates )
+    $!coordenada.getOrdinate(0)     $!coordenada.getOrdinate(1)
+#end

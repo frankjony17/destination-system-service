@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="3.01.01" author="gustavo.dias">
+
+        <createTable tableName="tb_tipo_documento" schemaName="destinacao">
+            <column name="id_tipo_documento" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_documento" type="varchar"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="3.01.02" author="gustavo.dias">
+
+        <createTable tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_sub_tipo_documento" type="varchar"/>
+
+            <column name="co_tipo_documento" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_sub_tipo_documento"
+                baseColumnNames="co_tipo_documento"
+                constraintName="fk_tipo_documento_sub_tipo_documento"
+                referencedTableName="tb_tipo_documento"
+                referencedColumnNames="id_tipo_documento"/>
+
+    </changeSet>
+
+    <changeSet id="3.01.03" author="gustavo.dias">
+
+        <insert tableName="tb_tipo_documento" schemaName="destinacao">
+            <column name="id_tipo_documento" value="1"/>
+            <column name="ds_tipo_documento" value="Extrato"/>
+        </insert>
+
+        <insert tableName="tb_tipo_documento" schemaName="destinacao">
+            <column name="id_tipo_documento" value="2"/>
+            <column name="ds_tipo_documento" value="Portaria"/>
+        </insert>
+
+        <insert tableName="tb_tipo_documento" schemaName="destinacao">
+            <column name="id_tipo_documento" value="3"/>
+            <column name="ds_tipo_documento" value="Aditivo do Contrato/Termo"/>
+        </insert>
+
+        <insert tableName="tb_tipo_documento" schemaName="destinacao">
+            <column name="id_tipo_documento" value="4"/>
+            <column name="ds_tipo_documento" value="Outros"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="3.01.04" author="gustavo.dias">
+
+        <insert tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" value="1"/>
+            <column name="ds_sub_tipo_documento" value="Dispensa"/>
+            <column name="co_tipo_documento" value="1"/>
+        </insert>
+
+        <insert tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" value="2"/>
+            <column name="ds_sub_tipo_documento" value="Inexigibilidade"/>
+            <column name="co_tipo_documento" value="1"/>
+        </insert>
+
+        <insert tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" value="3"/>
+            <column name="ds_sub_tipo_documento" value="Licitação"/>
+            <column name="co_tipo_documento" value="1"/>
+        </insert>
+
+        <insert tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" value="4"/>
+            <column name="ds_sub_tipo_documento" value="Contrato/Termo"/>
+            <column name="co_tipo_documento" value="1"/>
+        </insert>
+
+        <insert tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" value="5"/>
+            <column name="ds_sub_tipo_documento" value="Aditivo"/>
+            <column name="co_tipo_documento" value="1"/>
+        </insert>
+
+        <insert tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" value="6"/>
+            <column name="ds_sub_tipo_documento" value="Declaração de Interesse do Serviço Público - PDISP"/>
+            <column name="co_tipo_documento" value="2"/>
+        </insert>
+
+        <insert tableName="tb_sub_tipo_documento" schemaName="destinacao">
+            <column name="id_sub_tipo_documento" value="7"/>
+            <column name="ds_sub_tipo_documento" value="Autorizativa"/>
+            <column name="co_tipo_documento" value="2"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="3.01.04" author="diego.alves">
+        <dropColumn tableName="tb_destinacao_imovel" schemaName="destinacao">
+            <column name="ic_fracao_ideal"/>
+            <column name="ic_total_area_terreno"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="3.01.05" author="diego.alves">
+        <addColumn tableName="tb_destinacao_imovel" schemaName="destinacao">
+            <column name="nu_fracao_ideal" type="bigint"/>
+            <column name="nu_total_area_terreno" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="3.01.06" author="gustavo.dias">
+        <createTable tableName="tb_documento" schemaName="destinacao">
+            <column name="id_documento" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_tipo_documento" type="bigint"/>
+            <column name="co_sub_tipo_documento" type="bigint"/>
+            <column name="ds_especificar" type="varchar"/>
+            <column name="ds_pagina" type="varchar"/>
+            <column name="ds_secao" type="varchar"/>
+            <column name="co_arquivo" type="bigint"/>
+            <column name="dt_publicacao" type="date"/>
+            <column name="dt_assinatura" type="date"/>
+            <column name="dt_inicial_vigencia" type="date"/>
+            <column name="dt_final_vigencia" type="date"/>
+            <column name="ds_numero_termo" type="varchar"/>
+            <column name="ds_livro" type="varchar"/>
+            <column name="ds_folhas" type="varchar"/>
+
+
+        </createTable>
+
+        <createSequence sequenceName="tb_documento_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_documento"
+                baseColumnNames="co_tipo_documento"
+                constraintName="fk_tipo_documento"
+                referencedTableName="tb_tipo_documento"
+                referencedColumnNames="id_tipo_documento"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_documento"
+                baseColumnNames="co_sub_tipo_documento"
+                constraintName="fk_sub_tipo_documento"
+                referencedTableName="tb_sub_tipo_documento"
+                referencedColumnNames="id_sub_tipo_documento"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_documento"
+                baseColumnNames="co_arquivo"
+                constraintName="fk_co_arquivo_documento"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+
+    </changeSet>
+
+    <changeSet id="3.01.07" author="diego.alves">
+        <dropColumn tableName="tb_destinacao_imovel" schemaName="destinacao">
+            <column name="nu_total_area_terreno"/>
+        </dropColumn>
+    </changeSet>
+
+
+    <changeSet id="3.01.08" author="gustavo.dias">
+        <dropColumn tableName="tb_destinacao" schemaName="destinacao">
+            <column name="co_ato_autorizativo"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="3.01.09" author="gustavo.dias">
+        <addColumn tableName="tb_destinacao" schemaName="destinacao">
+            <column name="co_documento" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="3.01.10" author="gustavo.dias">
+        <addColumn tableName="tb_documento" schemaName="destinacao">
+            <column name="co_destinacao" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_documento"
+                baseColumnNames="co_destinacao"
+                constraintName="fk_co_destinacao_documento"
+                referencedTableName="tb_destinacao"
+                referencedColumnNames="id_destinacao"/>
+
+    </changeSet>
+
+    <changeSet id="3.01.11" author="diego.alves">
+
+        <createTable tableName="tb_arquivo_cad_imovel" schemaName="destinacao">
+            <column name="id_arquivo_cad_imovel" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="co_imagem_cad_imovel" type="bigint"/>
+            <column name="co_video_cad_imovel" type="bigint"/>
+            <column name="co_destinacao_imovel" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_arquivo_cad_imovel"
+                baseColumnNames="co_destinacao_imovel"
+                constraintName="fk_co_dest_imovel_arq_cadastro"
+                referencedTableName="tb_destinacao_imovel"
+                referencedColumnNames="id_destinacao_imovel"/>
+
+    </changeSet>
+
+    <changeSet id="3.01.12" author="diego.alves">
+        <createSequence sequenceName="tb_arquivo_cad_imovel_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="3.01.13" author="gustavo.dias">
+        <dropColumn tableName="tb_documento" schemaName="destinacao">
+            <column name="dt_assinatura"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="3.01.14" author="diego.alves">
+        <createTable tableName="tb_destinacao_imovel_parcela" schemaName="destinacao">
+            <column name="id_parcela" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_destinacao_imovel" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao_imovel_parcela"
+                baseColumnNames="id_parcela"
+                constraintName="fk_parcela_destinacao_imovel"
+                referencedTableName="tb_parcela"
+                referencedColumnNames="id_parcela"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao_imovel_parcela"
+                baseColumnNames="id_destinacao_imovel"
+                constraintName="fk_destinacao_imovel_parcela"
+                referencedTableName="tb_destinacao_imovel"
+                referencedColumnNames="id_destinacao_imovel"/>
+
+    </changeSet>
+
+    <changeSet id="3.01.15" author="diego.alves">
+        <sql dbms="postgresql">
+            insert into destinacao.tb_destinacao_imovel_parcela (id_parcela, id_destinacao_imovel)
+                select id_parcela, co_destinacao_imovel from destinacao.tb_parcela;
+        </sql>
+    </changeSet>
+
+    <changeSet id="3.01.16" author="diego.alves">
+        <dropColumn tableName="tb_parcela" schemaName="destinacao">
+            <column name="co_destinacao_imovel"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="3.01.17" author="diego.alves">
+        <dropColumn tableName="tb_doacao" schemaName="destinacao">
+            <column name="co_certidao_cartorial"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="3.01.18" author="diego.alves">
+        <dropColumn tableName="tb_venda" schemaName="destinacao">
+            <column name="co_certidao_cartorial"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="3.01.19" author="diego.alves">
+        <dropColumn tableName="tb_cdru" schemaName="destinacao">
+            <column name="co_certidao_cartorial"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="3.01.20" author="diego.alves">
+        <addColumn tableName="tb_destinacao" schemaName="destinacao">
+            <column name="co_certidao_cartorial" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao"
+                baseColumnNames="co_certidao_cartorial"
+                constraintName="fk_destinacao_certidao_cartorial"
+                referencedTableName="tb_certidao_cartorial"
+                referencedColumnNames="id_certidao_cartorial"/>
+
+    </changeSet>
+
+    <changeSet id="3.01.21" author="diego.alves">
+        <addColumn tableName="tb_arquivo_cad_imovel" schemaName="destinacao">
+            <column name="ds_nome" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="3.01.22" author="gustavo.dias">
+        <dropColumn tableName="tb_destinacao" schemaName="destinacao">
+            <column name="co_documento"/>
+        </dropColumn>
+    </changeSet>
+
+
+
+</databaseChangeLog>

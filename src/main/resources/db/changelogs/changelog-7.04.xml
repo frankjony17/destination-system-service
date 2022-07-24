@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="7.04.01" author="haillanderson.silva">
+        <preConditions>
+            <not>
+                <tableExists tableName="tb_motivo_cancelamento" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_motivo_cancelamento">
+            <column name="id_motivo_cancelamento" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_motivo_cancelamento" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="7.04.02" author="haillanderson.silva">
+
+        <preConditions>
+            <tableExists tableName="tb_motivo_cancelamento" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="1"/>
+            <column name="ds_motivo_cancelamento" value="Cancelamento por erro"/>
+        </insert>
+
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="2"/>
+            <column name="ds_motivo_cancelamento" value="Cancelamento por anulação"/>
+        </insert>
+
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="3"/>
+            <column name="ds_motivo_cancelamento" value="Encerramento por não cumprimento de encargo"/>
+        </insert>
+
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="4"/>
+            <column name="ds_motivo_cancelamento" value="Encerramento por interesse público"/>
+        </insert>
+
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="5"/>
+            <column name="ds_motivo_cancelamento" value="Encerramento por acordo entre partes"/>
+        </insert>
+        
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="6"/>
+            <column name="ds_motivo_cancelamento" value="Encerramento por devolução"/>
+        </insert>
+        
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="7"/>
+            <column name="ds_motivo_cancelamento" value="Encerramento por vencimento do contrato/termo"/>
+        </insert>
+        
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="8"/>
+            <column name="ds_motivo_cancelamento" value="Encerramento por reintegração de posse"/>
+        </insert>
+        
+        <insert tableName="tb_motivo_cancelamento" schemaName="destinacao">
+            <column name="id_motivo_cancelamento" value="9"/>
+            <column name="ds_motivo_cancelamento" value="Encerramento por regularização"/>
+        </insert>
+
+    </changeSet>
+    
+    <changeSet id="7.04.03" author="haillanderson.silva">
+        <preConditions>
+            <not>
+                <tableExists tableName="tb_cancelamento" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_cancelamento" schemaName="destinacao">
+            <column name="id_cancelamento" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_cpf_responsavel" type="varchar(20)"/>
+            <column name="dt_cancelamento" type="datetime"/>
+            <column name="co_motivo_cancelamento" type="bigint"/>
+            <column name="ds_observacao" type="text"/>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="7.04.04" author="haillanderson.silva">
+        <preConditions>
+            <not>
+                <tableExists tableName="tb_cancelamento_arquivo" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_cancelamento_arquivo" schemaName="destinacao">
+            <column name="id_cancelamento" type="bigint"/>
+            <column name="id_arquivo" type="bigint"/>
+        </createTable>
+            
+        <addPrimaryKey columnNames="id_cancelamento,id_arquivo"
+                           constraintName="pk_cancelamento_arquivo"
+                           schemaName="destinacao"
+                           tableName="tb_cancelamento_arquivo"/>
+            
+        <addForeignKeyConstraint
+            baseTableName="tb_cancelamento_arquivo"
+            baseColumnNames="id_cancelamento"
+            constraintName="fk_cancelamento"
+            referencedTableName="tb_cancelamento"
+            referencedColumnNames="id_cancelamento"/>
+        <addForeignKeyConstraint
+            baseTableName="tb_arquivo"
+            baseColumnNames="id_arquivo"
+            constraintName="fk_arquivo"
+            referencedTableName="tb_arquivo"
+            referencedColumnNames="id_arquivo"/>
+    </changeSet>
+    
+    
+    <changeSet id="7.04.05" author="haillanderson.silva">
+        
+        <addColumn schemaName="destinacao"
+                   tableName="tb_destinacao">
+            <column name="co_cancelamento" type="bigint"/>
+        </addColumn>
+            
+        <addForeignKeyConstraint
+            baseTableName="tb_destinacao"
+            baseColumnNames="co_cancelamento"
+            constraintName="fk_cancelamento"
+            referencedTableName="tb_cancelamento"
+            referencedColumnNames="id_cancelamento"/>
+    </changeSet>
+    
+    <changeSet id="7.04.06" author="haillanderson.silva">
+        <createSequence sequenceName="tb_cancelamento_seq"
+                        schemaName="destinacao" 
+                        startValue="1" 
+                        incrementBy="1"/>
+    </changeSet>
+
+
+</databaseChangeLog>

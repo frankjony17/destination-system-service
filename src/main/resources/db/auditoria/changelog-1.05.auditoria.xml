@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.05.01" author="rogerio.feitoza">
+        <dropColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="ds_finalidade"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.02" author="rogerio.feitoza">
+        <renameColumn schemaName="aud_destinacao" tableName="tb_encargo_aud" columnDataType="boolean"
+                      oldColumnName="ic_prazo_indeterminado" newColumnName="ic_cumprimento_encargo"/>
+    </changeSet>
+
+    <changeSet id="1.05.03" author="diego.alves">
+        <addColumn tableName="tb_destinacao_imovel_aud" schemaName="aud_destinacao">
+            <column name="ic_ultima_destinacao" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.05.04" author="diego.alves">
+        <addColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="co_contrato" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet id="1.05.05" author="diego.alves">
+        <dropColumn tableName="tb_venda_aud" schemaName="aud_destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.06" author="diego.alves">
+        <dropColumn tableName="tb_doacao_aud" schemaName="aud_destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.07" author="diego.alves">
+        <dropColumn tableName="tb_cuem_aud" schemaName="aud_destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.08" author="diego.alves">
+        <dropColumn tableName="tb_cdru_aud" schemaName="aud_destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.09" author="diego.alves">
+        <dropColumn tableName="tb_cessao_gratuita_aud" schemaName="aud_destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.10" author="diego.alves">
+        <dropColumn tableName="tb_termo_entrega_aud" schemaName="aud_destinacao">
+            <column name="co_contrato"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.11" author="giovane.oliveira">
+        <createTable schemaName="aud_destinacao" tableName="tb_uso_proprio_aud">
+            <column name="id_uso_proprio" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="co_responsavel" type="bigint"/>
+            <column name="co_utilizacao" type="bigint"/>
+            <column name="co_foto" type="bigint"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_uso_proprio_aud" columnNames="id_uso_proprio,rev" constraintName="pk_uso_proprio" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_uso_proprio_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.05.12" author="giovane.oliveira">
+        <createTable schemaName="aud_destinacao" tableName="tb_foto_aud">
+            <column name="id_foto" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="co_arquivo" type="bigint"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_foto_aud" columnNames="id_foto,rev" constraintName="pk_foto" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_foto_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.05.13" author="samuel.santos">
+        <addColumn tableName="tb_utilizacao_aud" schemaName="aud_destinacao">
+            <column name="ic_processo_posse" type="boolean"/>
+            <column name="num_processo" type="varchar"/>
+            <column name="ds_anotacoes" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.05.14" author="haillanderson.silva">
+        <addColumn tableName="tb_foto_aud" schemaName="aud_destinacao">
+            <column name="co_destinacao" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.05.15" author="haillanderson.silva">
+        <dropColumn tableName="tb_uso_proprio_aud" schemaName="aud_destinacao">
+            <column name="co_foto"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.16" author="giovane.oliveira">
+        <addColumn tableName="tb_utilizacao_aud" schemaName="aud_destinacao">
+            <column name="dt_utilizacao" type="date"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.05.17" author="giovane.oliveira">
+        <addColumn tableName="tb_uso_proprio_aud" schemaName="aud_destinacao">
+            <column name="ic_homologado" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.05.18" author="giovane.oliveira">
+        <dropColumn tableName="tb_uso_proprio_aud" schemaName="aud_destinacao">
+            <column name="co_responsavel"/>
+            <column name="co_utilizacao"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.05.19" author="haillanderson.silva">
+        <createTable schemaName="aud_destinacao" tableName="tb_documento_arquivo_aud">
+            <column name="id_documento_arquivo" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="co_arquivo" type="bigint"/>
+            <column name="co_destinacao" type="bigint"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_documento_arquivo_aud" columnNames="id_documento_arquivo,rev" constraintName="pk_documento_arquivo" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_documento_arquivo_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.05.20" author="haillanderson.silva">
+        <dropTable tableName="tb_interessado_aud" cascadeConstraints="true" schemaName="aud_destinacao" />
+    </changeSet>
+
+    <changeSet id="1.05.21" author="haillanderson.silva">
+        <dropTable tableName="tb_interessados_fotos_aud" cascadeConstraints="true" schemaName="aud_destinacao" />
+    </changeSet>
+
+    <changeSet id="1.05.22" author="haillanderson.silva">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_ocupante_aud" schemaName="aud_destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="aud_destinacao" tableName="tb_ocupante_aud">
+            <column name="id_ocupante" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_cpf_cnpj" type="varchar"/>
+            <column name="co_posse_informal" type="bigint"/>
+            <column name="ds_nome_razao_social" type="varchar"/>
+            <column name="co_endereco" type="bigint"/>
+            <column name="ds_ug" type="varchar"/>
+            <column name="nu_area_utilizada" type="number"/>
+            <column name="ds_estado_civil" type="varchar"/>
+            <column name="ds_cpf_conjuge" type="varchar"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_ocupante_aud" columnNames="id_ocupante,rev" constraintName="pk_ocupante" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_ocupante_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.05.23" author="haillandeson.silva">
+        <addColumn tableName="tb_uso_proprio_aud" schemaName="aud_destinacao">
+            <column name="co_responsavel_cadastro" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

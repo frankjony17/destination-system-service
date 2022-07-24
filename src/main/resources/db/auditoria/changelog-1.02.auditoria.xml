@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.02.1" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_sem_utilizacao_aud" schemaName="aud_destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_sem_utilizacao_aud" schemaName="aud_destinacao">
+            <column name="id_sem_utilizacao" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_sem_utilizacao_aud"
+                       columnNames="id_sem_utilizacao,rev" constraintName="pk_sem_utilizacao" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_sem_utilizacao_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.02.2" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_parcela_aud" schemaName="aud_destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_parcela_aud" schemaName="aud_destinacao">
+            <column name="id_parcela" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_sequencial" type="varchar(20)"/>
+            <column name="nu_area_terreno" type="number"/>
+            <column name="nu_area_diponivel" type="number"/>
+            <column name="ic_ativa" type="boolean"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_parcela_aud"
+                       columnNames="id_parcela,rev" constraintName="pk_parcela" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_parcela_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.3" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_imovel_aud" schemaName="aud_destinacao">
+            <column name="nu_area_terreno"/>
+            <column name="nu_area_diponivel"/>
+        </dropColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.4" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_benfeitoria_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <renameColumn schemaName="aud_destinacao" tableName="tb_benfeitoria_aud" oldColumnName="co_imovel" newColumnName="co_parcela"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.5" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_parcela_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_parcela_aud" schemaName="aud_destinacao">
+            <column name="co_imovel" type="bigint"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.6" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_posse_informal_aud" schemaName="aud_destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_posse_informal_aud" schemaName="aud_destinacao">
+            <column name="id_posse_informal" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_imovel" type="bigint"/>
+            <column name="ds_nome_entidade" type="varchar(255)"/>
+            <column name="ds_cnpj" type="varchar(20)"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_posse_informal_aud"
+                       columnNames="id_posse_informal,rev" constraintName="pk_posse_informal" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_posse_informal_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.7" author="gustavo.dias">
+
+        <addColumn schemaName="aud_destinacao" tableName="tb_destinacao_aud">
+            <column name="ds_finalidade" type="text"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.8" author="diego.alves">
+        <preConditions>
+            <tableExists tableName="tb_imovel_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_imovel_aud" schemaName="aud_destinacao">
+            <column name="co_tipo_imovel" type="bigint"/>
+            <column name="co_situacao_incorporacao" type="bigint"/>
+            <column name="co_natureza_imovel" type="bigint"/>
+            <column name="co_tipo_proprietario" type="bigint"/>
+            <column name="ds_proprietario" type="text"/>
+
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.02.9" author="diego.alves">
+        <preConditions>
+            <tableExists tableName="tb_imovel_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_imovel_aud" schemaName="aud_destinacao">
+            <column name="co_endereco" type="bigint"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.10" author="gustavo.dias">
+        <preConditions>
+        <not>
+            <columnExists schemaName="aud_destinacao" tableName="tb_parcela_aud" columnName="ds_memorial_descritivo"/>
+        </not>
+        </preConditions>
+
+        <addColumn schemaName="aud_destinacao" tableName="tb_parcela_aud">
+            <column name="ds_memorial_descritivo" type="text"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.11" author="diego.alves">
+        <preConditions>
+            <not>
+                <columnExists schemaName="aud_destinacao"
+                              tableName="tb_destinacao_imovel_aud"
+                              columnName="co_parcela"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="aud_destinacao" tableName="tb_destinacao_imovel_aud">
+            <column name="co_parcela" type="bigint"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.12" author="diego.alves">
+        <preConditions>
+            <not>
+                <columnExists schemaName="aud_destinacao"
+                              tableName="tb_imovel_aud"
+                              columnName="nu_area_terreno"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="aud_destinacao" tableName="tb_imovel_aud">
+            <column name="nu_area_terreno" type="number"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.13"  author="diego.alves">
+        <preConditions>
+            <columnExists schemaName="aud_destinacao"
+                          tableName="tb_benfeitoria_aud"
+                          columnName="ds_codigo_identificador"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_codigo_identificador"
+                        newDataType="varchar(10)"
+                        schemaName="aud_destinacao"
+                        tableName="tb_benfeitoria_aud"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.14" author="diego.alves">
+
+        <createTable schemaName="aud_destinacao" tableName="tb_pendencia_aud">
+            <column name="id_pendencia" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_pendencia" type="varchar"/>
+            <column name="ds_modulo" type="varchar(50)"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_pendencia_aud"
+                       columnNames="id_pendencia,rev" constraintName="pk_pendencia" />
+
+        <addForeignKeyConstraint constraintName="fk_rev_pendencia"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_pendencia_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.15" author="diego.alves">
+
+        <addColumn tableName="tb_imovel_aud" schemaName="aud_destinacao">
+            <column name="ic_ativo" type="boolean"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.16" author="diego.alves">
+
+        <dropTable tableName="tb_pendencia_aud" schemaName="aud_destinacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.17" author="haillanderson.silva">
+        <createTable schemaName="aud_destinacao" tableName="tb_parcela_arquivo_aud">
+            <column name="id_parcela" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="id_arquivo" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_parcela_arquivo_aud" columnNames="id_parcela,id_arquivo,rev" constraintName="pk_parcela_arquivo_aud" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_parcela_arquivo_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.18" author="diego.alves">
+        <dropColumn tableName="tb_destinacao_imovel_aud" schemaName="aud_destinacao">
+            <column name="co_parcela"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.02.19" author="diego.alves">
+        <addColumn tableName="tb_parcela_aud" schemaName="aud_destinacao">
+            <column name="co_destinacao_imovel" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

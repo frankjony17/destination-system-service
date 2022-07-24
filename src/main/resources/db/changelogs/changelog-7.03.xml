@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="7.03.01" author="giovane.oliveira">
+        <insert tableName="tb_tipo_licitacao" schemaName="destinacao">
+            <column name="id_tipo_licitacao" value="5"/>
+            <column name="ds_tipo_licitacao" value="pregão"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="7.03.02" author="rogerio.feitoza">
+        <update tableName="tb_tipo_utilizacao" schemaName="destinacao">
+            <column name="ds_tipo_utilizacao" value="Sem uso/Vago"/>
+            <column name="ic_ativo" value="false"/>
+            <where>id_tipo_utilizacao = 1</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="7.03.03" author="rogerio.feitoza">
+        <update tableName="tb_tipo_utilizacao" schemaName="destinacao">
+            <column name="ds_tipo_utilizacao" value="Sem uso definido"/>
+            <where>id_tipo_utilizacao = 3</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="7.03.04" author="giovane.oliveira">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_instituicao_financeira" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="1"/>
+            <column name="ds_instituicao_financeira" value="BANCO BTG PACTUAL"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="2"/>
+            <column name="ds_instituicao_financeira" value="BANCO MODAL"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="3"/>
+            <column name="ds_instituicao_financeira" value="BRASIL PLURAL CCTVM S/A"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="4"/>
+            <column name="ds_instituicao_financeira" value="CLEAR CORRETORA - GRUPO XP"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="5"/>
+            <column name="ds_instituicao_financeira" value="BB BANCO DE INVESTIMENTO S/A"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet author="giovane.oliveira" id="7.03.05">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_financeiro" schemaName="destinacao"/>
+            <tableExists tableName="tb_instituicao_financeira" schemaName="destinacao"/>
+        </preConditions>
+       <addColumn tableName="tb_financeiro" >
+           <column name="co_instituicao_financeira" type="bigint"></column>
+       </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_instituicao_financeira"
+                constraintName="fk_instituicao_financeira"
+                referencedTableName="tb_instituicao_financeira"
+                referencedColumnNames="id_instituicao_financeira"/>
+
+    </changeSet>
+
+    <changeSet id="7.03.06" author="giovane.oliveira">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_financeiro" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_financeiro" >
+            <column name="ic_fonte_recursos" type="boolean"></column>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="7.03.07" author="giovane.oliveira">
+
+        <createTable schemaName="destinacao"  tableName="tb_instituicao_financeira">
+            <column name="id_instituicao_financeira" type="bigint"/>
+            <column name="ds_instituicao_financeira" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="7.03.08" author="giovane.oliveira">
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="1"/>
+            <column name="ds_instituicao_financeira" value="BANCO BTG PACTUAL"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="2"/>
+            <column name="ds_instituicao_financeira" value="BANCO MODAL"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="3"/>
+            <column name="ds_instituicao_financeira" value="BRASIL PLURAL CCTVM S/A"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="4"/>
+            <column name="ds_instituicao_financeira" value="CLEAR CORRETORA - GRUPO XP"/>
+        </insert>
+
+        <insert tableName="tb_instituicao_financeira" schemaName="destinacao">
+            <column name="id_instituicao_financeira" value="5"/>
+            <column name="ds_instituicao_financeira" value="BB BANCO DE INVESTIMENTO S/A"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet author="giovane.oliveira" id="7.03.09">
+
+        <addPrimaryKey tableName="tb_instituicao_financeira" columnNames="id_instituicao_financeira"/>
+
+    </changeSet>
+
+    <changeSet author="giovane.oliveira" id="7.03.10">
+        <addColumn schemaName="destinacao"  tableName="tb_financeiro" >
+            <column name="co_instituicao_financeira" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_instituicao_financeira"
+                constraintName="fk_inst_financeira"
+                referencedTableName="tb_instituicao_financeira"
+                referencedColumnNames="id_instituicao_financeira"/>
+
+    </changeSet>
+
+    <changeSet id="7.03.11" author="antonio.souza">
+        <createTable tableName="tb_tipo_ato_autorizativo" schemaName="destinacao">
+            <column name="id_tipo_ato_autorizativo" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_ato_autorizativo" type="varchar"/>
+
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="7.03.12" author="antonio.souza">
+        <insert tableName="tb_tipo_ato_autorizativo" schemaName="destinacao">
+            <column name="id_tipo_ato_autorizativo" value="1"/>
+            <column name="ds_tipo_ato_autorizativo" value="Portaria"/>
+        </insert>
+        <insert tableName="tb_tipo_ato_autorizativo" schemaName="destinacao">
+            <column name="id_tipo_ato_autorizativo" value="2"/>
+            <column name="ds_tipo_ato_autorizativo" value="Resolução"/>
+        </insert>
+        <insert tableName="tb_tipo_ato_autorizativo" schemaName="destinacao">
+            <column name="id_tipo_ato_autorizativo" value="3"/>
+            <column name="ds_tipo_ato_autorizativo" value="Lei/Decreto-lei"/>
+        </insert>
+        <insert tableName="tb_tipo_ato_autorizativo" schemaName="destinacao">
+            <column name="id_tipo_ato_autorizativo" value="4"/>
+            <column name="ds_tipo_ato_autorizativo" value="Decreto"/>
+        </insert>
+        <insert tableName="tb_tipo_ato_autorizativo" schemaName="destinacao">
+            <column name="id_tipo_ato_autorizativo" value="5"/>
+            <column name="ds_tipo_ato_autorizativo" value="Despacho"/>
+        </insert>
+        <insert tableName="tb_tipo_ato_autorizativo" schemaName="destinacao">
+            <column name="id_tipo_ato_autorizativo" value="6"/>
+            <column name="ds_tipo_ato_autorizativo" value="Outro (Especificar)"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="7.03.13" author="antonio.souza">
+        <dropColumn columnName="ds_pagina"
+                    schemaName="destinacao"
+                    tableName="tb_ato_autorizativo"/>
+        <dropColumn columnName="ds_secao"
+                    schemaName="destinacao"
+                    tableName="tb_ato_autorizativo"/>
+        <dropColumn columnName="co_arquivo"
+                    schemaName="destinacao"
+                    tableName="tb_ato_autorizativo"/>
+        <dropColumn columnName="dt_assinatura"
+                    schemaName="destinacao"
+                    tableName="tb_ato_autorizativo"/>
+        <dropColumn columnName="ds_processo_sei"
+                    schemaName="destinacao"
+                    tableName="tb_ato_autorizativo"/>
+
+        <addColumn schemaName="destinacao"
+                   tableName="tb_ato_autorizativo">
+            <column name="co_tp_ato_autorizativo" type="bigint"/>
+        </addColumn>
+        <addNotNullConstraint columnName="co_tp_ato_autorizativo"
+                              columnDataType="bigint"
+                              schemaName="destinacao"
+                              tableName="tb_ato_autorizativo"/>
+
+        <addColumn schemaName="destinacao"
+                   tableName="tb_ato_autorizativo">
+            <column name="nu_ato" type="bigint"/>
+        </addColumn>
+        <addNotNullConstraint columnName="nu_ato"
+                              columnDataType="bigint"
+                              schemaName="destinacao"
+                              tableName="tb_ato_autorizativo"/>
+        <addNotNullConstraint columnName="dt_publicacao"
+                              columnDataType="date"
+                              schemaName="destinacao"
+                              tableName="tb_ato_autorizativo"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_ato_autorizativo"
+                baseColumnNames="co_tp_ato_autorizativo"
+                constraintName="fk_tp_ato_autorizativo"
+                referencedTableName="tb_tipo_ato_autorizativo"
+                referencedColumnNames="id_tipo_ato_autorizativo"/>
+
+    </changeSet>
+
+    <changeSet id="7.03.14" author="antonio.souza">
+        <addColumn schemaName="destinacao"
+                   tableName="tb_termo_entrega">
+            <column name="co_ato_autorizativo" type="bigint"/>
+        </addColumn>
+        <addNotNullConstraint columnName="co_ato_autorizativo"
+                              columnDataType="bigint"
+                              schemaName="destinacao"
+                              tableName="tb_termo_entrega"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_termo_entrega"
+                baseColumnNames="co_ato_autorizativo"
+                constraintName="fk_co_ato_autorizativo"
+                referencedTableName="tb_ato_autorizativo"
+                referencedColumnNames="id_ato_autorizativo"/>
+
+    </changeSet>
+
+    <changeSet id="7.03.15" author="diego.alves">
+        <dropColumn columnName="co_ato_autorizativo"
+                    schemaName="destinacao"
+                    tableName="tb_termo_entrega"/>
+    </changeSet>
+
+    <changeSet id="7.03.16" author="diego.alves">
+        <addColumn schemaName="destinacao"
+                   tableName="tb_termo_entrega">
+            <column name="co_ato_autorizativo" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                baseTableName="tb_termo_entrega"
+                baseColumnNames="co_ato_autorizativo"
+                constraintName="fk_co_ato_autorizativo"
+                referencedTableName="tb_ato_autorizativo"
+                referencedColumnNames="id_ato_autorizativo"/>
+    </changeSet>
+
+    <changeSet id="7.03.17" author="diego.alves">
+        <dropColumn columnName="co_extrato"
+                    schemaName="destinacao"
+                    tableName="tb_termo_entrega"/>
+    </changeSet>
+
+    <changeSet id="7.03.18" author="diego.alves">
+        <delete schemaName="destinacao"
+                tableName="tb_tipo_destinacao">
+            <where>id_tipo_destinacao = 8</where>
+        </delete>
+    </changeSet>
+
+    <changeSet id="7.03.19" author="rogerio.feitoza">
+        <sql>
+            INSERT INTO destinacao.tb_utilizacao
+            (id_utilizacao, co_tipo_utilizacao)
+            VALUES(nextval('destinacao.tb_utilizacao_seq'), 1);
+        </sql>
+    </changeSet>
+
+    <changeSet id="7.03.20" author="rogerio.feitoza">
+        <sql>
+            update destinacao.tb_destinacao
+                set co_utilizacao = (select id_utilizacao from destinacao.tb_utilizacao where co_tipo_utilizacao = 1)
+                where co_tipo_destinacao = 12;
+        </sql>
+    </changeSet>
+
+    <changeSet id="7.03.21" author="diego.alves">
+        <dropTable tableName="tb_extrato"
+                   schemaName="destinacao"/>
+    </changeSet>
+
+    <changeSet id="7.03.22" author="antonio.carlos">
+        <update tableName="tb_pendencia" schemaName="destinacao">
+            <column name="ds_url" value="https://www.basis.com.br/"/>
+            <where>ds_url is NULL</where>
+        </update>
+    </changeSet>
+
+
+</databaseChangeLog>

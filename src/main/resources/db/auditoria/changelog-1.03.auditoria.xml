@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.03.01" author="diego.alves">
+
+        <dropColumn tableName="tb_destinacao_imovel_aud" schemaName="aud_destinacao">
+            <column name="ic_fracao_ideal"/>
+            <column name="ic_total_area_terreno"/>
+        </dropColumn>
+
+    </changeSet>
+
+    <changeSet id="1.03.02" author="diego.alves">
+        <addColumn tableName="tb_destinacao_imovel_aud" schemaName="aud_destinacao">
+            <column name="nu_fracao_ideal" type="bigint"/>
+            <column name="nu_total_area_terreno" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.03.03" author="diego.alves">
+        <dropColumn tableName="tb_destinacao_imovel_aud" schemaName="aud_destinacao">
+            <column name="nu_total_area_terreno"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.03.04" author="">
+        <dropTable tableName="tb_ato_autorizativo_aud" schemaName="aud_destinacao"/>
+
+        <dropColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="co_ato_autorizativo"/>
+        </dropColumn>
+
+    </changeSet>
+
+    <changeSet id="1.03.05" author="gustavo.dias">
+        <createTable schemaName="aud_destinacao" tableName="tb_documento_aud">
+            <column name="id_documento" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="co_tipo_documento" type="bigint"/>
+            <column name="co_sub_tipo_documento" type="bigint"/>
+            <column name="ds_especificar" type="varchar"/>
+            <column name="ds_pagina" type="varchar"/>
+            <column name="ds_secao" type="varchar"/>
+            <column name="co_destinacao" type="bigint"/>
+            <column name="co_arquivo" type="bigint"/>
+            <column name="dt_publicacao" type="date"/>
+            <column name="dt_assinatura" type="date"/>
+            <column name="dt_inicial_vigencia" type="date"/>
+            <column name="dt_final_vigencia" type="date"/>
+            <column name="ds_numero_termo" type="varchar"/>
+            <column name="ds_livro" type="varchar"/>
+            <column name="ds_folhas" type="varchar"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_documento_aud" columnNames="id_documento,rev" constraintName="pk_documento" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_documento_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.03.06" author="diego.alves">
+
+        <createTable tableName="tb_arquivo_cad_imovel_aud" schemaName="aud_destinacao">
+            <column name="id_arquivo_cad_imovel" type="bigint"/>
+            <column name="co_imagem_cad_imovel" type="bigint"/>
+            <column name="co_video_cad_imovel" type="bigint"/>
+            <column name="co_destinacao_imovel" type="bigint"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao"
+                       tableName="tb_arquivo_cad_imovel_aud"
+                       columnNames="id_arquivo_cad_imovel,rev"
+                       constraintName="pk_arquivo_cad_imovel_aud" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_arquivo_cad_imovel_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="1.03.07" author="diego.alves">
+        <createTable tableName="tb_destinacao_imovel_parcela_aud" schemaName="aud_destinacao">
+            <column name="id_parcela" type="bigint"/>
+            <column name="id_destinacao_imovel" type="bigint"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao"
+                       tableName="tb_destinacao_imovel_parcela_aud"
+                       columnNames="id_parcela,id_destinacao_imovel,rev"
+                       constraintName="pk_destinacao_imovel_parcela" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_destinacao_imovel_parcela_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="1.03.08" author="diego.alves">
+        <dropColumn tableName="tb_parcela_aud" schemaName="aud_destinacao">
+            <column name="co_destinacao_imovel"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.03.09" author="diego.alves">
+        <dropColumn tableName="tb_doacao_aud" schemaName="aud_destinacao">
+            <column name="co_certidao_cartorial"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.03.10" author="diego.alves">
+        <dropColumn tableName="tb_venda_aud" schemaName="aud_destinacao">
+            <column name="co_certidao_cartorial"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.03.11" author="diego.alves">
+        <dropColumn tableName="tb_cdru_aud" schemaName="aud_destinacao">
+            <column name="co_certidao_cartorial"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.03.12" author="diego.alves">
+        <addColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="co_certidao_cartorial" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.03.13" author="diego.alves">
+        <addColumn tableName="tb_arquivo_cad_imovel_aud" schemaName="aud_destinacao">
+            <column name="ds_nome" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.04.01" author="gustavo.dias">
+        <addColumn tableName="tb_documento_aud" schemaName="aud_destinacao">
+            <column name="ic_dispensado" type="boolean"/>
+            <column name="ds_justificativa" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.04.02" author="haillanderson.silva">
+        <addColumn tableName="tb_unidade_autonoma_aud" schemaName="aud_destinacao">
+            <column name="ds_especializacao" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.04.03" author="haillanderson.silva">
+        <addColumn tableName="tb_benfeitoria_aud" schemaName="aud_destinacao">
+            <column name="ds_nome_benfeitoria" type="varchar"/>
+            <column name="ds_especializacao" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.04.04" author="diego.alves">
+        <addColumn tableName="tb_benfeitoria_aud" schemaName="aud_destinacao">
+            <column name="co_imovel" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.04.04" author="haillanderson.silva">
+        <addColumn tableName="tb_utilizacao_aud" schemaName="aud_destinacao">
+            <column name="co_tipo_utilizacao" type="bigint"/>
+            <column name="co_sub_tipo_utilizacao" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.04.05" author="haillanderson.silva">
+        <addColumn tableName="tb_utilizacao_aud" schemaName="aud_destinacao">
+            <column name="ds_especificacao_utilizacao" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.04.06" author="gustavo.dias">
+        <dropTable tableName="tb_arquivo_cad_imovel_aud" schemaName="aud_destinacao"/>
+    </changeSet>
+
+    <changeSet id="1.04.07" author="haillanderson.silva">
+        <addColumn tableName="tb_arquivo_aud" schemaName="aud_destinacao">
+            <column name="ds_nome_real" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

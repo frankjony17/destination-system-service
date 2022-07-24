@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2.02.01" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_sem_utilizacao" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_sem_utilizacao" schemaName="destinacao">
+            <column name="id_sem_utilizacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="2.02.02" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_parcela" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_parcela" schemaName="destinacao">
+            <column name="id_parcela" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_sequencial" type="varchar(20)"/>
+            <column name="nu_area_terreno" type="number"/>
+            <column name="nu_area_diponivel" type="number"/>
+            <column name="ic_ativa" type="boolean"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="2.02.03" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_imovel" schemaName="destinacao">
+            <column name="nu_area_terreno"/>
+            <column name="nu_area_diponivel"/>
+        </dropColumn>
+
+    </changeSet>
+
+    <changeSet id="2.02.04" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_benfeitoria" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropForeignKeyConstraint baseTableName="tb_benfeitoria" constraintName="fk_benfeitoria_imovel"/>
+
+        <dropColumn tableName="tb_benfeitoria" schemaName="destinacao">
+            <column name="co_imovel"/>
+        </dropColumn>
+
+
+        <addColumn tableName="tb_benfeitoria" schemaName="destinacao">
+            <column name="co_parcela" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_benfeitoria"
+                baseColumnNames="co_parcela"
+                constraintName="fk_benfeitoria_parcela"
+                referencedTableName="tb_parcela"
+                referencedColumnNames="id_parcela"/>
+
+    </changeSet>
+
+    <changeSet id="2.02.05" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_parcela" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_parcela" schemaName="destinacao">
+            <column name="co_imovel" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_parcela"
+                baseColumnNames="co_imovel"
+                constraintName="fk_parcela_imovel"
+                referencedTableName="tb_imovel"
+                referencedColumnNames="id_imovel"/>
+
+    </changeSet>
+
+    <changeSet id="2.02.06" author="gustavo.dias">
+
+        <addColumn schemaName="destinacao" tableName="tb_destinacao">
+            <column name="ds_finalidade" type="text"/>
+        </addColumn>
+
+    </changeSet>
+
+
+    <changeSet id="2.02.07" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_parcela_arquivo" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_parcela_arquivo" schemaName="destinacao">
+            <column name="id_parcela" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_arquivo" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_parcela_arquivo"
+                baseColumnNames="id_parcela"
+                constraintName="fk_parcela_arquivo"
+                referencedTableName="tb_parcela"
+                referencedColumnNames="id_parcela"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_parcela_arquivo"
+                baseColumnNames="id_arquivo"
+                constraintName="fk_arquivo_parcela"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+
+    </changeSet>
+
+
+    <changeSet id="2.02.08" author="diego.alves">
+        <preConditions>
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_imovel" schemaName="destinacao">
+            <column name="co_tipo_imovel" type="bigint"/>
+            <column name="co_situacao_incorporacao" type="bigint"/>
+            <column name="co_natureza_imovel" type="bigint"/>
+            <column name="co_tipo_proprietario" type="bigint"/>
+            <column name="ds_proprietario" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.02.09" author="diego.alves">
+        <preConditions>
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_imovel" schemaName="destinacao">
+            <column name="co_endereco" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_imovel"
+                baseColumnNames="co_endereco"
+                constraintName="fk_imovel_endereco"
+                referencedTableName="tb_endereco"
+                referencedColumnNames="id_endereco"/>
+
+
+    </changeSet>
+
+    <changeSet id="2.02.10" author="gustavo.dias">
+        <preConditions>
+            <not>
+                <columnExists schemaName="destinacao" tableName="tb_parcela" columnName="ds_memorial_descritivo"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_parcela">
+            <column name="ds_memorial_descritivo" type="text"/>
+
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.02.11" author="diego.alves">
+        <preConditions>
+            <not>
+                <columnExists schemaName="destinacao"
+                              tableName="tb_destinacao_imovel"
+                              columnName="co_parcela"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_destinacao_imovel">
+            <column name="co_parcela" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao_imovel"
+                baseColumnNames="co_parcela"
+                constraintName="fk_dest_imovel_parcela"
+                referencedTableName="tb_parcela"
+                referencedColumnNames="id_parcela"/>
+
+    </changeSet>
+
+    <changeSet id="2.02.12" author="diego.alves">
+        <preConditions>
+            <not>
+                <columnExists schemaName="destinacao"
+                              tableName="tb_imovel"
+                              columnName="nu_area_terreno"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_imovel">
+            <column name="nu_area_terreno" type="number"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.02.13" author="diego.alves">
+        <preConditions>
+            <columnExists schemaName="destinacao"
+                          tableName="tb_benfeitoria"
+                          columnName="ds_codigo_identificador"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_codigo_identificador"
+                        newDataType="varchar(10)"
+                        schemaName="destinacao"
+                        tableName="tb_benfeitoria"/>
+
+    </changeSet>
+
+    <changeSet id="2.02.14" author="diego.alves">
+
+        <addColumn tableName="tb_pendencia" schemaName="destinacao">
+            <column name="ds_modulo" type="varchar(50)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.02.15" author="diego.alves">
+        <update schemaName="destinacao"
+                tableName="tb_pendencia">
+            <column name="ds_modulo" value="DESTINACAO"/>
+        </update>
+    </changeSet>
+
+
+    <changeSet id="2.02.16" author="diego.alves">
+        <insert tableName="tb_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="2"/>
+            <column name="ds_pendencia" value="Ajuste da destinação por alteração do imóvel"/>
+            <column name="ds_modulo" value="DESTINACAO"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="2.02.17" author="diego.alves">
+
+        <addColumn tableName="tb_imovel" schemaName="destinacao">
+            <column name="ic_ativo" type="boolean"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.02.18" author="gustavo.dias">
+
+        <addColumn tableName="tb_destinacao_pendencia" schemaName="destinacao">
+            <column name="dt_data_geracao" type="date"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.02.19" author="gustavo.dias">
+
+        <addColumn tableName="tb_pendencia" schemaName="destinacao">
+            <column name="ds_url" type="varchar(255)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.02.20" author="diego.alves">
+        <createTable tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_descricao" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2.02.21" author="diego.alves">
+        <createTable tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_pendencia" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_permissao_pendencia"
+                baseColumnNames="id_permissao"
+                constraintName="fk_permissao_pendencia"
+                referencedTableName="tb_permissao"
+                referencedColumnNames="id_permissao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_permissao_pendencia"
+                baseColumnNames="id_pendencia"
+                constraintName="fk_pendencia_permissao"
+                referencedTableName="tb_pendencia"
+                referencedColumnNames="id_pendencia"/>
+
+    </changeSet>
+
+    <changeSet id="2.02.22" author="diego.alves">
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="1"/>
+            <column name="ds_descricao" value="DESTINACAOMANTERDOACAO"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="2"/>
+            <column name="ds_descricao" value="DESTINACAOMANTERVENDA"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="3"/>
+            <column name="ds_descricao" value="DESTINACAOMANTERPOSSEINFORMAL"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="4"/>
+            <column name="ds_descricao" value="DESTINACAOMANTERCUEM"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="5"/>
+            <column name="ds_descricao" value="DESTINACAOMANTERCDRU"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="6"/>
+            <column name="ds_descricao" value="DESTINACAOMANTERCDRU"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="7"/>
+            <column name="ds_descricao" value="DESTINACAO_CONSULTAR_DESTINACAO"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="8"/>
+            <column name="ds_descricao" value="DESTINACAOMANTERCESSAOGRATUITA"/>
+        </insert>
+
+        <insert tableName="tb_permissao" schemaName="destinacao">
+            <column name="id_permissao" value="9"/>
+            <column name="ds_descricao" value="DESTINACAO_SUSPENSAO_DETALHAR"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="2.02.23" author="diego.alves">
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="1"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="2"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="3"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="4"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="5"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="6"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="7"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="8"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="9"/>
+            <column name="id_pendencia" value="1"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="2.02.24" author="diego.alves">
+
+        <renameColumn newColumnName="ds_permissao"
+                      oldColumnName="ds_descricao"
+                      schemaName="destinacao"
+                      tableName="tb_permissao"/>
+
+    </changeSet>
+
+    <changeSet id="2.02.25" author="diego.alves">
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="1"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="2"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="3"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="4"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="5"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="6"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="7"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="8"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+        <insert tableName="tb_permissao_pendencia" schemaName="destinacao">
+            <column name="id_permissao" value="9"/>
+            <column name="id_pendencia" value="2"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="2.02.26" author="diego.alves">
+        <dropColumn tableName="tb_destinacao_imovel" schemaName="destinacao">
+            <column name="co_parcela"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="2.02.27" author="diego.alves">
+        <addColumn tableName="tb_parcela" schemaName="destinacao">
+            <column name="co_destinacao_imovel" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.02.28" author="diego.alves">
+        <addForeignKeyConstraint
+                baseTableName="tb_parcela"
+                baseColumnNames="co_destinacao_imovel"
+                constraintName="fk_parcela_destinacao_imovel"
+                referencedTableName="tb_destinacao_imovel"
+                referencedColumnNames="id_destinacao_imovel"/>
+    </changeSet>
+
+    <changeSet id="2.02.29" author="diego.alves">
+        <sql dbms="postgresql">
+            update destinacao.tb_parcela as par set co_destinacao_imovel = (select di.id_destinacao_imovel from destinacao.tb_destinacao_imovel di
+                join destinacao.tb_destinacao d on d.id_destinacao = di.co_destinacao
+                join destinacao.tb_parcela p on p.co_imovel = di.co_imovel
+                where d.co_tipo_destinacao = 12 and di.co_imovel = par.co_imovel group by di.id_destinacao_imovel)
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

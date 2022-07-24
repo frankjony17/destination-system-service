@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2.01.01" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_arquivo" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn schemaName="destinacao"
+                    tableName="tb_arquivo">
+            <column name="ar_binario" type="bytea" defaultValueBoolean="true"/>
+        </dropColumn>
+
+        <addColumn schemaName="destinacao"
+                   tableName="tb_destinacao">
+            <column name="tb_arquivo" type="Varchar(255)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.01.02" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_arquivo" schemaName="destinacao"/>
+            <tableExists tableName="tb_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <dropColumn schemaName="destinacao"
+                    tableName="tb_destinacao">
+            <column name="tb_arquivo" type="bytea" defaultValueBoolean="true"/>
+        </dropColumn>
+        <addColumn schemaName="destinacao"
+                   tableName="tb_arquivo">
+            <column name="dir_arquivo" type="varchar(255)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.01.03" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel_arquivo" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropTable tableName="tb_imovel_arquivo" schemaName="destinacao"/>
+
+    </changeSet>
+
+    <changeSet id="2.01.04" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_imovel" schemaName="destinacao">
+            <column name="co_endereco" type="bitint"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="2.01.05" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel_plantas" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropTable tableName="tb_imovel_plantas" schemaName="destinacao"/>
+    </changeSet>
+
+    <changeSet id="2.01.06" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao_imovel" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_destinacao_imovel" schemaName="destinacao">
+            <column name="nu_area_terreno_destinada" type="number"/>
+            <column name="ic_fracao_ideal" type="boolean"/>
+            <column name="ic_total_area_terreno" type="boolean"/>
+            <column name="ds_memorial_desc_area_construida" type="text"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="2.01.07" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_doc_imovel_destinado" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_doc_imovel_destinado">
+            <column name="id_destinacao_imovel" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_arquivo" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_imovel_destinado"
+                baseColumnNames="id_destinacao_imovel"
+                constraintName="fk_doc_destinacao_imovel"
+                referencedTableName="tb_destinacao_imovel"
+                referencedColumnNames="id_destinacao_imovel"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_imovel_destinado"
+                baseColumnNames="id_arquivo"
+                constraintName="fk_doc_destinacao_arquivo"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+
+    </changeSet>
+
+    <changeSet id="2.01.08" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_unidade_autonoma" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_unidade_autonoma">
+            <column name="id_unidade_autonoma" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_unidade_autonoma_cad_imovel" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nu_area" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createSequence sequenceName="tb_unidade_autonoma_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="2.01.09" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_benfeitoria" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_benfeitoria">
+            <column name="id_benfeitoria" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_benfeitoria_cad_imovel" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_codigo_identificador" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ic_ativa" type="boolean">
+                <constraints nullable="false"/>
+            </column><column name="co_imovel" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createSequence sequenceName="tb_benfeitoria_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_benfeitoria"
+                baseColumnNames="co_imovel"
+                constraintName="fk_benfeitoria_imovel"
+                referencedTableName="tb_imovel"
+                referencedColumnNames="id_imovel"/>
+
+    </changeSet>
+
+    <changeSet id="2.01.10" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_imovel" schemaName="destinacao">
+            <column name="ds_memorial_descritivo" type="text"/>
+            <column name="nu_area_construida" type="number"/>
+            <column name="ds_longitude" type="number"/>
+            <column name="ds_latitude" type="number"/>
+            <column name="nu_valor" type="number"/>
+            <column name="nu_area_terreno_destinada" type="number"/>
+            <column name="ic_fracao_ideal" type="boolean"/>
+            <column name="ic_total_area_terreno" type="boolean"/>
+            <column name="ds_memorial_desc_area_construida" type="text"/>
+        </dropColumn>
+
+        <addColumn tableName="tb_imovel" schemaName="destinacao">
+            <column name="co_unidade_autonoma" type="bigint"/>
+            <column name="ds_indicador_unidade_benfeitoria" type="varchar(30)"/>
+            <column name="nu_area_diponivel" type="number"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_imovel"
+                baseColumnNames="co_unidade_autonoma"
+                constraintName="fk_imovel_unidade_autonome"
+                referencedTableName="tb_unidade_autonoma"
+                referencedColumnNames="id_unidade_autonoma"/>
+
+    </changeSet>
+
+    <changeSet id="2.01.11" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <insert tableName="tb_tipo_destinacao" schemaName="destinacao">
+            <column name="id_tipo_destinacao" value="12"/>
+            <column name="ds_tipo_destinacao" value="Sem Utilizacao"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="2.01.12" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_benfeitoria_destinada" schemaName="destinacao"/>
+        </preConditions>
+
+
+        <dropColumn tableName="tb_benfeitoria_destinada" schemaName="destinacao">
+            <column name="co_imovel" type="bigint"/>
+        </dropColumn>
+        <addColumn tableName="tb_benfeitoria_destinada" schemaName="destinacao">
+            <column name="co_destinacao_imovel" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_benfeitoria_destinada"
+                baseColumnNames="co_destinacao_imovel"
+                constraintName="fk_benf_dest_destinacao_imovel"
+                referencedTableName="tb_destinacao_imovel"
+                referencedColumnNames="id_destinacao_imovel"/>
+
+    </changeSet>
+
+    <changeSet id="2.01.13" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_benfeitoria" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_benfeitoria" schemaName="destinacao">
+            <column name="nu_area_construida" type="number"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.01.14" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_benfeitoria" schemaName="destinacao"/>
+        </preConditions>
+        <modifyDataType columnName="ds_codigo_identificador"
+                        newDataType="char(2)"
+                        schemaName="destinacao"
+                        tableName="tb_benfeitoria"/>
+    </changeSet>
+
+    <changeSet id="2.01.15" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_fundamento_legal" schemaName="destinacao"/>
+        </preConditions>
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="13"/>
+            <column name="ds_fundamento_legal" value="Fundamento Legal 13"/>
+            <column name="co_tipo_destinacao" value="10"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="2.01.16" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_benfeitoria" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_benfeitoria" schemaName="destinacao">
+            <column name="nu_area_disponivel" type="number"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.01.17" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_unidade_autonoma" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_unidade_autonoma" schemaName="destinacao">
+            <column name="nu_area_disponivel" type="number"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.01.18" author="diego.alves">
+        <renameColumn columnDataType="bigint"
+                      newColumnName="id_benfeitoria_destinada"
+                      oldColumnName="id_benfeitoria_parcela"
+                      schemaName="destinacao"
+                      tableName="tb_benfeitoria_destinada"/>
+    </changeSet>
+
+</databaseChangeLog>

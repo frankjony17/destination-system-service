@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <!-- CRIA DESTINAÇÃO SEM UTILIZAÇÃO -->
+    <changeSet id="1.01" author="diego.alves" context="e2e">
+        <sql dbms="postgresql">
+
+            INSERT INTO destinacao.tb_endereco
+            (id_endereco, ds_cep, ds_tipo_logradouro, ds_logradouro, ds_numero, ds_complemento, ds_municipio, ds_bairro, ds_uf, ds_pais, ds_cidade_exterior, ds_codigo_postal)
+            VALUES(nextval('destinacao.tb_endereco_seq'), '71900100', 'AV.', 'das Castanheiras', '12', NULL, 'Brasília', 'Norte (Águas Claras)', 'DF', 'Brasil', NULL, NULL);
+
+            INSERT INTO destinacao.tb_imovel
+            (id_imovel, nu_rip, id_cadastro_imovel, co_unidade_autonoma, ds_indicador_unidade_benfeitoria, co_tipo_imovel, co_situacao_incorporacao, co_natureza_imovel, co_tipo_proprietario, ds_proprietario, co_endereco, nu_area_terreno, ic_ativo)
+            VALUES(nextval('destinacao.tb_imovel_seq'), '00000028', 28, NULL, 'BENFEITORIA', 1, 28, 2, NULL, 'UNIAO', 1, 2313.21, true);
+
+            INSERT INTO destinacao.tb_destinacao
+            (id_destinacao, nu_atendimento, nu_processo, co_utilizacao, co_fundamento_legal, ds_instrumento, co_tipo_destinacao, co_licitacao, co_financeiro, co_status_destinacao, ds_finalidade, co_certidao_cartorial)
+            VALUES(nextval('destinacao.tb_destinacao_seq'), NULL, NULL, NULL, NULL, 'SEM_UTILIZACAO', 12, NULL, NULL, 1, NULL, NULL);
+
+            INSERT INTO destinacao.tb_sem_utilizacao (id_sem_utilizacao) VALUES(1);
+
+            INSERT INTO destinacao.tb_destinacao_imovel
+            (id_destinacao_imovel, co_destinacao, co_imovel, nu_codigo_utilizacao, nu_area_terreno_destinada, ds_memorial_desc_area_construida, nu_fracao_ideal)
+            VALUES(nextval('destinacao.tb_destinacao_imovel_seq'), 1, 1, '0000', NULL, NULL, NULL);
+
+            INSERT INTO destinacao.tb_parcela
+            (id_parcela, ds_sequencial, nu_area_terreno, nu_area_diponivel, ic_ativa, co_imovel, ds_memorial_descritivo)
+            VALUES(nextval('destinacao.tb_parcela_seq'), 'P0', 2313.21, 2313.21, true, 1, NULL);
+
+            INSERT INTO destinacao.tb_destinacao_imovel_parcela (id_parcela, id_destinacao_imovel)
+            VALUES(1, 1);
+
+            INSERT INTO destinacao.tb_benfeitoria
+            (id_benfeitoria, id_benfeitoria_cad_imovel, ds_codigo_identificador, ic_ativa, nu_area_construida, nu_area_disponivel, co_parcela, ds_nome_benfeitoria, ds_especializacao, co_imovel)
+            VALUES(nextval('destinacao.tb_benfeitoria_seq'), 43, 'E1', true, 2343.24, 2343.24, 1, 'asdas', 'Casa/Residência', 1);
+
+            INSERT INTO destinacao.tb_benfeitoria
+            (id_benfeitoria, id_benfeitoria_cad_imovel, ds_codigo_identificador, ic_ativa, nu_area_construida, nu_area_disponivel, co_parcela, ds_nome_benfeitoria, ds_especializacao, co_imovel)
+            VALUES(nextval('destinacao.tb_benfeitoria_seq'), 44, 'C1', true, 3243.24, 3243.24, 1, NULL, NULL, 1);
+
+        </sql>
+    </changeSet>
+
+    <!-- IMOVEL PARA DESTINACAO DE VENDA -->
+    <changeSet id="1.02" author="diego.alves" context="e2e">
+        <sql dbms="postgresql">
+
+            INSERT INTO destinacao.tb_endereco
+            (id_endereco, ds_cep, ds_tipo_logradouro, ds_logradouro, ds_numero, ds_complemento, ds_municipio, ds_bairro, ds_uf, ds_pais, ds_cidade_exterior, ds_codigo_postal)
+            VALUES(nextval('destinacao.tb_endereco_seq'), '71900100', 'AV.', 'das Castanheiras', '10', NULL, 'Brasília', 'Norte (Águas Claras)', 'DF', 'Brasil', NULL, NULL);
+
+            INSERT INTO destinacao.tb_imovel
+            (id_imovel, nu_rip, id_cadastro_imovel, co_unidade_autonoma, ds_indicador_unidade_benfeitoria, co_tipo_imovel, co_situacao_incorporacao, co_natureza_imovel, co_tipo_proprietario, ds_proprietario, co_endereco, nu_area_terreno, ic_ativo)
+            VALUES(nextval('destinacao.tb_imovel_seq'), '00000029', 29, NULL, 'BENFEITORIA', 1, 1, 1, NULL, 'UNIAO', 2, 213.21, true);
+
+            INSERT INTO destinacao.tb_destinacao
+            (id_destinacao, nu_atendimento, nu_processo, co_utilizacao, co_fundamento_legal, ds_instrumento, co_tipo_destinacao, co_licitacao, co_financeiro, co_status_destinacao, ds_finalidade, co_certidao_cartorial)
+            VALUES(nextval('destinacao.tb_destinacao_seq'), NULL, NULL, NULL, NULL, 'SEM_UTILIZACAO', 12, NULL, NULL, 1, NULL, NULL);
+
+
+            INSERT INTO destinacao.tb_sem_utilizacao (id_sem_utilizacao) VALUES(2);
+
+            INSERT INTO destinacao.tb_destinacao_imovel
+            (id_destinacao_imovel, co_destinacao, co_imovel, nu_codigo_utilizacao, nu_area_terreno_destinada, ds_memorial_desc_area_construida, nu_fracao_ideal)
+            VALUES(nextval('destinacao.tb_destinacao_imovel_seq'), 2, 2, '0000', NULL, NULL, NULL);
+
+            INSERT INTO destinacao.tb_parcela
+            (id_parcela, ds_sequencial, nu_area_terreno, nu_area_diponivel, ic_ativa, co_imovel, ds_memorial_descritivo)
+            VALUES(nextval('destinacao.tb_parcela_seq'), 'P0', 213.21, 213.21, true, 2, NULL);
+
+            INSERT INTO destinacao.tb_destinacao_imovel_parcela (id_parcela, id_destinacao_imovel)
+            VALUES(2, 2);
+
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

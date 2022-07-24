@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:spatial="http://www.liquibase.org/xml/ns/dbchangelog-ext/liquibase-spatial"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+         http://www.liquibase.org/xml/ns/dbchangelog-ext/liquibase-spatial
+         http://lonnyj.github.com/liquibase-spatial/liquibase-spatial.xsd">
+
+   <!--<includeAll path="src/main/resources/db/changelogs"/>-->
+
+    <include file="db/changelogs/changelog-1.01.xml"/>
+    <include file="db/changelogs/changelog-1.02.xml"/>
+    <include file="db/changelogs/changelog-1.03.xml"/>
+    <include file="db/changelogs/changelog-1.04.xml"/>
+    <include file="db/changelogs/changelog-1.05.xml"/>
+    <include file="db/changelogs/changelog-2.01.xml"/>
+    <include file="db/changelogs/changelog-2.02.xml"/>
+    <include file="db/changelogs/changelog-3.01.xml"/>
+    <include file="db/changelogs/changelog-4.01.xml"/>
+    <include file="db/changelogs/changelog-4.02.xml"/>
+    <include file="db/changelogs/changelog-5.01.xml"/>
+    <include file="db/changelogs/changelog-6.01.xml"/>
+    <include file="db/changelogs/changelog-6.02.xml"/>
+    <include file="db/changelogs/changelog-7.01.xml"/>
+    <include file="db/changelogs/changelog-7.02.xml"/>
+    <include file="db/changelogs/changelog-7.03.xml"/>
+    <include file="db/changelogs/changelog-7.04.xml"/>
+    <include file="db/changelogs/changelog-7.05.xml"/>
+    <include file="db/changelogs/changelog-7.06.xml"/>
+    <include file="db/changelogs/changelog-7.07.xml"/>
+    <include file="db/changelogs/changelog-7.08.xml"/>
+    <include file="db/changelogs/changelog-7.09.xml"/>
+    <include file="db/changelogs/changelog-7.10.xml"/>
+    <include file="db/changelogs/changelog-7.11.xml"/>
+
+    <include file="db/auditoria/changelog-1.01.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.02.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.03.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.04.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.05.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.06.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.07.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.08.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.09.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.10.auditoria.xml"/>
+    <include file="db/auditoria/changelog-1.11.auditoria.xml"/>
+    <include file="db/e2e/changelog-1.00.e2e.xml"/>
+</databaseChangeLog>

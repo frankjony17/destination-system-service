@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="7.05.01" author="rogerio.feitoza">
+        <preConditions>
+            <not>
+                <tableExists tableName="tb_permissao_uso_imovel_funcional" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="tb_permissao_uso_imovel_funcional" schemaName="destinacao">
+            <column name="id_permissao_uso_imovel_funcional" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="7.05.02" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <insert tableName="tb_tipo_destinacao" schemaName="destinacao">
+            <column name="id_tipo_destinacao" value="14"/>
+            <column name="ds_tipo_destinacao" value="Permissão de Uso de Imóvel Funcional"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

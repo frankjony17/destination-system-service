@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="6.02.01" author="giovane.oliveira">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_uso_proprio" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_uso_proprio">
+            <column name="id_uso_proprio" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_responsavel" type="bigint"/>
+            <column name="co_utilizacao" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_uso_proprio"
+                baseColumnNames="co_responsavel"
+                constraintName="fk_responsavel"
+                referencedTableName="tb_responsavel"
+                referencedColumnNames="id_responsavel"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_uso_proprio"
+                baseColumnNames="co_utilizacao"
+                constraintName="fk_utilizacao"
+                referencedTableName="tb_utilizacao"
+                referencedColumnNames="id_utilizacao"/>
+    </changeSet>
+
+    <changeSet id="6.02.02" author="giovane.oliveira">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_foto" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_foto">
+            <column name="id_foto" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_arquivo" type="bigint"/>
+            <column name="co_destinacao" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_foto"
+                baseColumnNames="co_arquivo"
+                constraintName="fk_arquivo"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_foto"
+                baseColumnNames="co_destinacao"
+                constraintName="fk_destinacao"
+                referencedTableName="tb_destinacao"
+                referencedColumnNames="id_destinacao"/>
+    </changeSet>
+
+    <changeSet id="6.02.03" author="samuel.santos">
+        <addColumn tableName="tb_utilizacao" schemaName="destinacao">
+            <column name="ic_processo_posse" type="boolean"/>
+            <column name="num_processo" type="varchar"/>
+            <column name="ds_anotacoes" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="6.02.04" author="giovane.oliveira">
+        <addColumn tableName="tb_utilizacao" schemaName="destinacao">
+            <column name="dt_utilizacao" type="date"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="6.02.05" author="giovane.oliveira">
+        <addColumn tableName="tb_uso_proprio" schemaName="destinacao">
+            <column name="ic_homologado" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="6.02.06" author="giovane.oliveira">
+        <createSequence sequenceName="tb_foto_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="6.02.07" author="giovane.oliveira">
+        <dropForeignKeyConstraint baseTableName="tb_uso_proprio" constraintName="fk_responsavel"/>
+        <dropForeignKeyConstraint baseTableName="tb_uso_proprio" constraintName="fk_utilizacao"/>
+        <dropColumn tableName="tb_uso_proprio" schemaName="destinacao">
+            <column name="co_responsavel"/>
+            <column name="co_utilizacao"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="6.02.08" author="haillanderson.silva">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_documento_arquivo" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_documento_arquivo">
+            <column name="id_documento_arquivo" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_arquivo" type="bigint"/>
+            <column name="co_destinacao" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_documento_arquivo"
+                baseColumnNames="co_arquivo"
+                constraintName="fk_arquivo"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_documento_arquivo"
+                baseColumnNames="co_destinacao"
+                constraintName="fk_destinacao"
+                referencedTableName="tb_destinacao"
+                referencedColumnNames="id_destinacao"/>
+
+        <createSequence sequenceName="tb_documento_arquivo_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="6.02.09" author="haillanderson.silva">
+        <dropTable tableName="tb_interessado" cascadeConstraints="true" schemaName="destinacao" />
+    </changeSet>
+
+    <changeSet id="6.02.10" author="haillanderson.silva">
+        <dropTable tableName="tb_interessados_fotos" cascadeConstraints="true" schemaName="destinacao" />
+    </changeSet>
+
+
+    <changeSet id="6.02.11" author="haillanderson.silva">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_ocupante" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_ocupante">
+            <column name="id_ocupante" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_cpf_cnpj" type="varchar"/>
+            <column name="co_posse_informal" type="bigint"/>
+            <column name="ds_nome_razao_social" type="varchar"/>
+            <column name="co_endereco" type="bigint"/>
+            <column name="ds_ug" type="varchar"/>
+            <column name="nu_area_utilizada" type="number"/>
+            <column name="ds_estado_civil" type="varchar"/>
+            <column name="ds_cpf_conjuge" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_ocupante"
+                baseColumnNames="co_posse_informal"
+                constraintName="fk_posse_informal"
+                referencedTableName="tb_posse_informal"
+                referencedColumnNames="id_posse_informal"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_ocupante"
+                baseColumnNames="co_endereco"
+                constraintName="fk_endereco"
+                referencedTableName="tb_endereco"
+                referencedColumnNames="id_endereco"/>
+
+        <createSequence sequenceName="tb_ocupante_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="6.02.12" author="rogerio.feitoza">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_posse" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_posse" schemaName="destinacao">
+            <column name="id_tipo_posse" value="4"/>
+            <column name="ds_tipo_posse" value="Ocupante não identificado"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="6.02.13" author="giovane.oliveira">
+
+        <insert tableName="tb_pendencia" schemaName="destinacao">
+            <column name="id_pendencia" value="4"/>
+            <column name="ds_pendencia" value="Comprovar registro de uso próprio"/>
+            <column name="ds_modulo" value="DESTINACAO"/>
+        </insert>
+
+
+    </changeSet>
+
+    <changeSet id="6.02.14" author="haillandeson.silva">
+        <addColumn tableName="tb_uso_proprio" schemaName="destinacao">
+            <column name="co_responsavel_cadastro" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="6.02.15" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <update schemaName="destinacao"
+                tableName="tb_tipo_destinacao">
+            <column name="ds_tipo_destinacao" value="Sem Utilização"/>
+            <where>id_tipo_destinacao = 12</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="6.02.16" author="haillanderson.silva">
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="4"/>
+            <column name="ds_status_destinacao" value="Rascunho"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

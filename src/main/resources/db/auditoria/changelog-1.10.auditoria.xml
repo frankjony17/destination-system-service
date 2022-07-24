@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.10.01" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinatario_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_destinatario_aud" schemaName="aud_destinacao" columnName="co_tipo_destinatario"/>
+        <dropColumn tableName="tb_destinatario_aud" schemaName="aud_destinacao" columnName="co_endereco"/>
+        <dropColumn tableName="tb_destinatario_aud" schemaName="aud_destinacao" columnName="ds_razao_social"/>
+        <addColumn tableName="tb_destinatario_aud" schemaName="aud_destinacao">
+            <column name="ds_nome_empresarial" type="varchar(200)"/>
+            <column name="co_endereco_correspondencia" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.10.02" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_transferencia_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_transferencia_aud" schemaName="aud_destinacao" columnName="nu_processo"/>
+        <dropColumn tableName="tb_transferencia_aud" schemaName="aud_destinacao" columnName="co_base_legal"/>
+        <addColumn tableName="tb_transferencia_aud" schemaName="aud_destinacao">
+            <column name="co_tipo_destinatario" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.10.03" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_telefone_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_telefone_aud" schemaName="aud_destinacao">
+            <column name="co_destinatario" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet id="1.10.04" author="rogerio.feitoza">
+        <createTable schemaName="aud_destinacao" tableName="tb_tipo_destinatario_aud">
+            <column name="id_tipo_destinatario" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="ds_tipo_destinatario" type="varchar(255)"/>
+
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_tipo_destinatario_aud" columnNames="id_tipo_destinatario,rev" constraintName="pk_tipo_destinatario" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableSchemaName="aud_destinacao" baseTableName="tb_tipo_destinatario_aud"
+                                 baseColumnNames="rev"
+                                 referencedTableSchemaName="aud_destinacao" referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.10.06" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinatario_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_destinatario_aud" schemaName="aud_destinacao">
+            <column name="ds_autarquia_fundacao" type="varchar(200)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="felipe.melo" id="1.10.07">
+        <preConditions>
+            <tableExists schemaName="aud_destinacao" tableName="tb_encerramento_destinacao_aud"/>
+        </preConditions>
+        <dropUniqueConstraint constraintName="tb_encerramento_destinacao_aud_id_encerramento_destinacao_key"
+                              schemaName="aud_destinacao"
+                              tableName="tb_encerramento_destinacao_aud"/>
+    </changeSet>
+
+    <changeSet author="felipe.melo" id="1.10.08">
+        <dropPrimaryKey constraintName="pk_encerramento_destinacao"
+                        schemaName="aud_destinacao"
+                        tableName="tb_encerramento_destinacao_aud"/>
+
+        <addPrimaryKey tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao" columnNames="id_encerramento_destinacao, rev"
+          constraintName="pk_id_encerramento_destinacao_aud" />
+    </changeSet>
+
+    <changeSet id="1.10.09" author="felipe.melo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_utilizacao_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_utilizacao_aud" schemaName="aud_destinacao">
+            <column name="dt_efetivacao_utilizacao" type="date"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.10.10" author="jonatas.sousa">
+        <addColumn schemaName="aud_destinacao" tableName="tb_destinacao_imovel_aud">
+            <column name="ic_ativa" type="boolean"/>
+        </addColumn>
+        <addColumn schemaName="aud_destinacao" tableName="tb_destinacao_imovel_aud">
+            <column name="co_versao_destinacao_imovel"  type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.10.11" author="jonatas.sousa">
+        <dropColumn columnName="ic_ativa" schemaName="aud_destinacao" tableName="tb_destinacao_imovel_aud"/>
+        <dropColumn columnName="co_versao_destinacao_imovel" schemaName="aud_destinacao" tableName="tb_destinacao_imovel_aud"/>
+    </changeSet>
+
+    <changeSet id="1.10.12" author="jonatas.sousa">
+        <addColumn schemaName="aud_destinacao" tableName="tb_destinacao_aud">
+            <column name="ic_ativa" type="boolean"/>
+        </addColumn>
+        <addColumn schemaName="aud_destinacao" tableName="tb_destinacao_aud">
+            <column name="co_versao_destinacao"  type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="rogerio.feitoza" id="1.10.13">
+        <preConditions>
+            <tableExists schemaName="aud_destinacao" tableName="tb_endereco_correspondencia_aud"/>
+        </preConditions>
+        <dropUniqueConstraint constraintName="tb_endereco_correspondencia_aud_id_endereco_correspondencia_key"
+                              schemaName="aud_destinacao"
+                              tableName="tb_endereco_correspondencia_aud"/>
+    </changeSet>
+
+    <changeSet author="rogerio.feitoza" id="1.10.14">
+        <dropPrimaryKey constraintName="pk_endereco_correspondencia"
+                        schemaName="aud_destinacao"
+                        tableName="tb_endereco_correspondencia_aud"/>
+
+        <addPrimaryKey tableName="tb_endereco_correspondencia_aud" schemaName="aud_destinacao" columnNames="id_endereco_correspondencia, rev"
+                       constraintName="pk_id_endereco_correspondencia_aud" />
+    </changeSet>
+
+    <changeSet id="1.10.15" author="felipe.melo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="dt_inicio_fundamento" type="date"/>
+            <column name="dt_final_fundamento" type="date"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.10.16" author="jonatas.sousa">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="dt_destinacao_historico" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.10.17" author="jonatas.sousa">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_benfeitoria_destinada_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_benfeitoria_destinada_aud" schemaName="aud_destinacao">
+            <column name="ic_ativa" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

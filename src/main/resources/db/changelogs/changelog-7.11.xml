@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="7.11.01" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="tb_tipo_afetacao" schemaName="destinacao"/></not>
+        </preConditions>
+        <createTable tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="ds_tipo_afetacao" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="7.11.02" author="rogerio.feitoza">
+        <preConditions>
+            <tableExists tableName="tb_tipo_afetacao" schemaName="destinacao"/>
+        </preConditions>
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="1"/>
+            <column name="ds_tipo_afetacao" value="Declaração de Interesse do serviço público"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="2"/>
+            <column name="ds_tipo_afetacao" value="Ato Autorizativo de Destinação Publicado"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="3"/>
+            <column name="ds_tipo_afetacao" value="Reserva técnica da RFFSA"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="4"/>
+            <column name="ds_tipo_afetacao" value="Indicação ao Fundo Contingente"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="5"/>
+            <column name="ds_tipo_afetacao" value="Ato Autorizativo para Venda Publicado"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="6"/>
+            <column name="ds_tipo_afetacao" value="Declaração para fim de Desapropriação Utilidade/Necessidade Pública/Interesse Social"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="7"/>
+            <column name="ds_tipo_afetacao" value="Restrição de Uso Decorrente de Extinção de Entidade"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="8"/>
+            <column name="ds_tipo_afetacao" value="Reservado/Condicionado para uso específico"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="9"/>
+            <column name="ds_tipo_afetacao" value="Decisão/Determinação Judicial"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="10"/>
+            <column name="ds_tipo_afetacao" value="Decisão/Determinação de Órgão de Controle"/>
+        </insert>
+
+        <insert tableName="tb_tipo_afetacao" schemaName="destinacao">
+            <column name="id_tipo_afetacao" value="11"/>
+            <column name="ds_tipo_afetacao" value="Outros"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="7.11.03" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="tb_tipo_acao" schemaName="detinacao"/></not>
+        </preConditions>
+        
+        <createTable tableName="tb_tipo_acao" schemaName="destinacao">
+            <column name="id_tipo_acao" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="ds_tipo_acao" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7.11.04" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_acao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_acao" schemaName="destinacao">
+            <column name="id_tipo_acao" value="1"/>
+            <column name="ds_tipo_acao" value="Reintegração de Posse"/>
+        </insert>
+
+        <insert tableName="tb_tipo_acao" schemaName="destinacao">
+            <column name="id_tipo_acao" value="2"/>
+            <column name="ds_tipo_acao" value="Outra"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="7.11.05" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="tb_tipo_ato" schemaName="destinacao"/></not>
+        </preConditions>
+
+        <createTable tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="ds_tipo_ato" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7.11.06" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_ato" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" value="1"/>
+            <column name="ds_tipo_ato" value="Portaria"/>
+        </insert>
+
+        <insert tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" value="2"/>
+            <column name="ds_tipo_ato" value="Resolução"/>
+        </insert>
+
+        <insert tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" value="3"/>
+            <column name="ds_tipo_ato" value="Lei/Decreto-lei"/>
+        </insert>
+
+        <insert tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" value="4"/>
+            <column name="ds_tipo_ato" value="Decreto"/>
+        </insert>
+
+        <insert tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" value="5"/>
+            <column name="ds_tipo_ato" value="Despacho"/>
+        </insert>
+
+        <insert tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" value="6"/>
+            <column name="ds_tipo_ato" value="Ato Judicial(especificar)"/>
+        </insert>
+
+        <insert tableName="tb_tipo_ato" schemaName="destinacao">
+            <column name="id_tipo_ato" value="7"/>
+            <column name="ds_tipo_ato" value="Outro (especificar)"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="7.11.07" author="rogerio.feitoza">
+        <createTable tableName="tb_afetacao" schemaName="destinacao">
+            <column name="id_afetacao" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="co_tipo_afetacao" type="bigint"/>
+            <column name="co_tipo_acao" type="bigint"/>
+            <column name="ds_especificar" type="varchar(255)"/>
+            <column name="dt_prazo_reserva" type="date"/>
+            <column name="co_tipo_ato" type="bigint"/>
+            <column name="nu_numero_ato" type="bigint"/>
+            <column name="dt_data_ato" type="date"/>
+            <column name="ic_publicado" type="boolean"/>
+            <column name="ds_pagina" type="varchar(255)"/>
+            <column name="ds_secao" type="varchar(255)"/>
+            <column name="dt_publicacao" type="date"/>
+            <column name="ic_imovel" type="boolean"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="7.11.08" author="rogerio.feitoza">
+        <createSequence sequenceName="tb_afetacao_seq" schemaName="destinacao" startValue="1" incrementBy="1"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao"
+                baseColumnNames="co_tipo_afetacao"
+                constraintName="fk_afetacao_tipo_afetacao"
+                referencedTableName="tb_tipo_afetacao"
+                referencedColumnNames="id_tipo_afetacao"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao"
+                baseColumnNames="co_tipo_acao"
+                constraintName="fk_afetacao_tipo_acao"
+                referencedTableName="tb_tipo_acao"
+                referencedColumnNames="id_tipo_acao"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao"
+                baseColumnNames="co_tipo_ato"
+                constraintName="fk_afetacao_tipo_ato"
+                referencedTableName="tb_tipo_ato"
+                referencedColumnNames="id_tipo_ato"/>
+    </changeSet>
+
+    <changeSet id="7.11.09" author="rogerio.feitoza">
+        <createTable tableName="tb_afetacao_utilizacao" schemaName="destinacao">
+            <column name="id_afetacao" type="bigint"/>
+            <column name="id_tipo_utilizacao" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_utilizacao"
+                baseColumnNames="id_afetacao"
+                constraintName="fk_afetacao_utilizacao"
+                referencedTableName="tb_afetacao"
+                referencedColumnNames="id_afetacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_utilizacao"
+                baseColumnNames="id_tipo_utilizacao"
+                constraintName="fk_utilizacao_afetacao"
+                referencedTableName="tb_tipo_utilizacao"
+                referencedColumnNames="id_tipo_utilizacao"/>
+    </changeSet>
+
+    <changeSet id="7.11.10" author="rogerio.feitoza">
+        <createTable tableName="tb_afetacao_arquivo" schemaName="destinacao">
+            <column name="id_afetacao" type="bigint"/>
+            <column name="id_arquivo" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_arquivo"
+                baseColumnNames="id_afetacao"
+                constraintName="fk_afetacao_arquivo"
+                referencedTableName="tb_afetacao"
+                referencedColumnNames="id_afetacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_arquivo"
+                baseColumnNames="id_arquivo"
+                constraintName="fk_arquivo_afetacao"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+    </changeSet>
+
+    <changeSet id="7.11.11" author="rogerio.feitoza">
+        <createTable tableName="tb_afetacao_sub_utilizacao" schemaName="destinacao">
+            <column name="id_afetacao" type="bigint"/>
+            <column name="id_sub_tipo_utilizacao" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_sub_utilizacao"
+                baseColumnNames="id_afetacao"
+                constraintName="fk_afetacao_sub_utilizacao"
+                referencedTableName="tb_afetacao"
+                referencedColumnNames="id_afetacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_sub_utilizacao"
+                baseColumnNames="id_sub_tipo_utilizacao"
+                constraintName="fk_sub_utilizacao_afetacao"
+                referencedTableName="tb_sub_tipo_utilizacao"
+                referencedColumnNames="id_sub_tipo_utilizacao"/>
+    </changeSet>
+
+    <changeSet id="7.11.12" author="rogerio.feitoza">
+        <createTable tableName="tb_afetacao_imovel" schemaName="destinacao">
+            <column name="id_afetacao" type="bigint"/>
+            <column name="id_imovel" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_imovel"
+                baseColumnNames="id_afetacao"
+                constraintName="fk_afetacao_imovel"
+                referencedTableName="tb_afetacao"
+                referencedColumnNames="id_afetacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_afetacao_imovel"
+                baseColumnNames="id_imovel"
+                constraintName="fk_imovel_afetacao"
+                referencedTableName="tb_imovel"
+                referencedColumnNames="id_imovel"/>
+    </changeSet>
+</databaseChangeLog>

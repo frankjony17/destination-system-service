@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.09.1" author="rogerio.feitoza">
+        <createTable schemaName="aud_destinacao" tableName="tb_cessao_onerosa_aud">
+            <column name="id_cessao_onerosa" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="ds_tipo_cessao" type="varchar"/>
+            <column name="ic_cumprimento_encargo" type="boolean"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_cessao_onerosa_aud" columnNames="id_cessao_onerosa,rev"
+                       constraintName="pk_id_cessao_onerosa" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_cessao_onerosa_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"/>
+    </changeSet>
+    <changeSet id="1.09.02" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_interveniente_aud" schemaName="aud_destinacao"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tb_interveniente_aud" schemaName="aud_destinacao">
+            <column name="id_interveniente" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_cpf_cnpj" type="varchar"/>
+            <column name="ds_nome" type="varchar"/>
+            <column name="ds_codigo_ug" type="varchar(55)"/>
+            <column name="ds_email" type="varchar"/>
+            <column name="ds_nome_entidade" type="varchar(255)"/>
+            <column name="co_endereco_correspondencia" type="bigint"/>
+            <column name="co_dados_responsavel" type="bigint"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+        <addPrimaryKey columnNames="id_interveniente"
+                       constraintName="pk_interveniente"
+                       schemaName="aud_destinacao"
+                       tableName="tb_interveniente_aud"/>
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_interveniente_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"/>
+
+
+    </changeSet>
+
+    <changeSet id="1.09.03" author="rogerio.feitoza">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_dados_responsavel_aud">
+            <column name="co_interveniente" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.09.04" author="rogerio.feitoza">
+
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_telefone_aud">
+            <column name="co_interveniente" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.09.05" author="rogerio.feitoza">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_destinacao_aud">
+            <column name="co_ato_autorizativo" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.09.06" author="rogerio.feitoza">
+
+        <dropColumn tableName="tb_termo_entrega_aud" schemaName="aud_destinacao">
+            <column name="co_ato_autorizativo">
+            </column>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="1.09.07" author="felipe.melo">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_interveniente_aud">
+            <column name="ic_possui" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.09.08" author="felipe.melo">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_imovel_aud">
+            <column name="co_forma_incorporacao" type="bigint"/>
+        </addColumn>
+    <addColumn schemaName="aud_destinacao"
+               tableName="tb_imovel_aud">
+        <column name="co_tipo_aquisicao" type="bigint"/>
+    </addColumn>
+    <addColumn schemaName="aud_destinacao"
+               tableName="tb_imovel_aud">
+        <column name="co_entidade_extinta" type="bigint"/>
+    </addColumn>
+    </changeSet>
+    <changeSet id="1.09.09" author="jonatas.sousa">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_imovel_aud">
+            <column name="nu_area_terreno_antigo" type="bigint"/>
+        </addColumn>
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_imovel_aud">
+            <column name="nu_area_construida_antigo" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="felipe.melo" id="1.09.10">
+        <createTable tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao">
+            <column name="id_encerramento_destinacao" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="ds_nome_responsavel_tecnico" type="varchar(255)"/>
+            <column name="ds_cpf_responsavel_tecnico" type="varchar(11)"/>
+            <column name="ds_nome_superintendente" type="varchar(255)"/>
+            <column name="ds_cpf_superintendente" type="varchar(11)"/>
+            <column name="dt_encerramento_destinacao" type="date"/>
+            <column name="ds_motivo_encerramento_destinacao" type="varchar(255)"/>
+            <column name="ds_observacao_motivo" type="text"/>
+            <column name="ds_despacho_encerramento_destinacao" type="varchar(255)"/>
+            <column name="ds_observacao_despacho" type="text"/>
+        </createTable>
+        <addPrimaryKey columnNames="id_encerramento_destinacao"
+                       constraintName="pk_encerramento_destinacao"
+                       schemaName="aud_destinacao"
+                       tableName="tb_encerramento_destinacao_aud"/>
+        <createSequence sequenceName="tb_encerramento_destinacao_aud_seq"
+                        schemaName="aud_destinacao" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+
+    <changeSet author="felipe.melo" id="1.09.11">
+        <createTable schemaName="aud_destinacao" tableName="tb_encerramento_destinacao_arquivo_aud">
+            <column name="co_encerramento_destinacao" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_arquivo" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_encerramento_destinacao_arquivo_aud" columnNames="co_encerramento_destinacao, co_arquivo, rev"
+                       constraintName="pk_co_encerramento_destinacao_arquivo_aud" />
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_encerramento_destinacao_arquivo_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"/>
+    </changeSet>
+
+    <changeSet author="felipe.melo" id="1.09.12">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao_aud" schemaName="aud_destinacao"/>
+            <tableExists tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_destinacao_aud" schemaName="aud_destinacao">
+            <column name="co_encerramento_destinacao" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="felipe.melo" id="1.09.13">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao">
+            <column name="ic_ativo" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.09.14" author="felipe.melo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao_aud" schemaName="aud_destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao">
+            <column name="revtype" type="bigint"/>
+        </addColumn>
+        <addColumn tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao">
+            <column name="rev" type="bigint">
+            <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_encerramento_destinacao_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"/>
+    </changeSet>
+
+    <changeSet id="1.09.15" author="felipe.melo">
+    <preConditions onFail="MARK_RAN">
+        <tableExists tableName="tb_destinacao_aud" schemaName="aud_destinacao"/>
+    </preConditions>
+    <addColumn tableName="tb_encerramento_destinacao_aud" schemaName="aud_destinacao">
+        <column name="co_destinacao" type="bigint"/>
+    </addColumn>
+    </changeSet>
+
+    <changeSet id="1.09.16" author="jonatas.sousa">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_classificacao_imovel_aud" schemaName="aud_destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="aud_destinacao" tableName="tb_classificao_imovel_aud">
+            <column name="id_classificacao_imovel" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_classificao_imovel" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.09.17" author="jonatas.sousa">
+        <addColumn schemaName="aud_destinacao"
+                   tableName="tb_imovel_aud">
+            <column name="co_classificao_imovel" type="bigint"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

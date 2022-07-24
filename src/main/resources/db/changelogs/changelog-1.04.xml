@@ -1,0 +1,1263 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.04.01" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_destinacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_destinacao" schemaName="destinacao">
+            <column name="id_tipo_destinacao" value="6"/>
+            <column name="ds_tipo_destinacao" value="Gestão Praia"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.04.02" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_status_destinacao" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_status_destinacao">
+            <column name="id_status_destinacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_descricao" type="varchar(100)"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.04.03" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_gestao_praia" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_gestao_praia">
+            <column name="id_gestao_praia" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_requerimento" type="bigint"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.04.04" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_analise_tecnica">
+            <column name="id_analise_tecnica" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_justificativa" type="varchar(255)"/>
+            <column name="ic_documento_pendente" type="boolean"/>
+            <column name="ds_obs_documento_pendente" type="varchar(255)"/>
+            <column name="ds_info_complementar" type="varchar(255)"/>
+            <column name="ds_info_complementar_espeficia" type="varchar(255)"/>
+        </createTable>
+
+        <createSequence sequenceName="tb_analise_tecnica_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.05" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_despacho" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_despacho">
+            <column name="id_despacho" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="tp_despacho" type="varchar(20)"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.04.06" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_analise_tecnica_despacho" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_analise_tecnica_despacho">
+            <column name="id_analise_tecnica" type="bigint"/>
+            <column name="id_despacho" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho"
+                baseColumnNames="id_analise_tecnica"
+                constraintName="fk_analise_tecnica_despacho"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho"
+                baseColumnNames="id_despacho"
+                constraintName="fk_despacho_analise_tecnica"
+                referencedTableName="tb_despacho"
+                referencedColumnNames="id_despacho"/>
+
+    </changeSet>
+
+
+    <changeSet id="1.04.07" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_historico_analise_tecnica" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_historico_analise_tecnica">
+            <column name="id_historico_analise_tecnica" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_analise_tecnica" type="bigint"/>
+            <column name="dt_alteracao" type="datetime"/>
+            <column name="co_status_destinacao_anterior" type="bigint"/>
+            <column name="co_status_destinacao_atual" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_historico_analise_tecnica"
+                baseColumnNames="co_analise_tecnica"
+                constraintName="fk_historico_analise_tecnica"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_historico_analise_tecnica"
+                baseColumnNames="co_status_destinacao_anterior"
+                constraintName="fk_status_destinacao_anterior"
+                referencedTableName="tb_status_destinacao"
+                referencedColumnNames="id_status_destinacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_historico_analise_tecnica"
+                baseColumnNames="co_status_destinacao_atual"
+                constraintName="fk_status_destinacao_atual"
+                referencedTableName="tb_status_destinacao"
+                referencedColumnNames="id_status_destinacao"/>
+
+        <createSequence sequenceName="tb_historico_analise_tecnica_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.08" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_item_verificacao_especifica" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_item_verificacao_especifica">
+            <column name="id_item_verificacao_especifica" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_item" type="bigint"/>
+            <column name="ic_resposta" type="boolean"/>
+            <column name="ds_observacao" type="varchar(255)"/>
+            <column name="co_analise_tecnica" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_item_verificacao_especifica"
+                baseColumnNames="co_analise_tecnica"
+                constraintName="fk_item_verificacao_especifica_analise_tecnica"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+
+        <createSequence sequenceName="tb_item_verificacao_especifica_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.09" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_item_verificacao" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_item_verificacao">
+            <column name="id_item_verificacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_item" type="bigint"/>
+            <column name="ic_resposta" type="boolean"/>
+            <column name="ds_observacao" type="varchar(255)"/>
+            <column name="co_analise_tecnica" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_item_verificacao"
+                baseColumnNames="co_analise_tecnica"
+                constraintName="fk_item_verificacao_analise_tecnica"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+
+        <createSequence sequenceName="tb_item_verificacao_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.10" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_doc_complementar" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_doc_complementar">
+            <column name="id_doc_complementar" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_analise_tecnica" type="bigint"/>
+            <column name="co_arquivo" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_complementar"
+                baseColumnNames="co_analise_tecnica"
+                constraintName="fk_doc_compl_analise_tecnica"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_complementar"
+                baseColumnNames="co_arquivo"
+                constraintName="fk_doc_compl_arquivo"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+
+
+        <createSequence sequenceName="tb_doc_complementar_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.11" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_doc_complementar" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_doc_complementar">
+            <column name="id_doc_complementar" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_analise_tecnica" type="bigint"/>
+            <column name="co_arquivo" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_complementar"
+                baseColumnNames="co_analise_tecnica"
+                constraintName="fk_doc_compl_analise_tecnica"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_complementar"
+                baseColumnNames="co_arquivo"
+                constraintName="fk_doc_compl_arquivo"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+
+
+        <createSequence sequenceName="tb_doc_complementar_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.12" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_doc_complementar_especifico" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_doc_complementar_especifico">
+            <column name="id_doc_complementar_especifico" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_analise_tecnica" type="bigint"/>
+            <column name="co_arquivo" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_complementar"
+                baseColumnNames="co_analise_tecnica"
+                constraintName="fk_doc_compl_especifico_analise_tecnica"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doc_complementar"
+                baseColumnNames="co_arquivo"
+                constraintName="fk_doc_compl_especifico_arquivo"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+
+        <createSequence sequenceName="tb_doc_complementar_especifico_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.13" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_historico_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_historico_analise_tecnica">
+            <column name="ds_justificativa" type="varchar(255)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.04.14" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_destinacao">
+            <column name="co_status_destinacao" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao"
+                baseColumnNames="co_status_destinacao"
+                constraintName="fk_status_destinacao_destinacao"
+                referencedTableName="tb_status_destinacao"
+                referencedColumnNames="id_status_destinacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.15" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_status_destinacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="1"/>
+            <column name="ds_descricao" value="Aguardando Análise Técnica"/>
+        </insert>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="2"/>
+            <column name="ds_descricao" value="Rascunho"/>
+        </insert>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="3"/>
+            <column name="ds_descricao" value="Em Análise Técnica"/>
+        </insert>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="4"/>
+            <column name="ds_descricao" value="Aguardando Manifestação da Chefia"/>
+        </insert>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="5"/>
+            <column name="ds_descricao" value="Aguardando Manifestação do Superintendente"/>
+        </insert>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="6"/>
+            <column name="ds_descricao" value="Aguardando Manifestação do Secretário"/>
+        </insert>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="7"/>
+            <column name="ds_descricao" value="Enviado para publicação"/>
+        </insert>
+
+        <insert tableName="tb_status_destinacao" schemaName="destinacao">
+            <column name="id_status_destinacao" value="8"/>
+            <column name="ds_descricao" value="Publicado"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.04.16" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_historico_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_historico_analise_tecnica">
+            <column name="co_usuario" type="bigint"/>
+        </addColumn>
+
+        <addColumn schemaName="destinacao" tableName="tb_historico_analise_tecnica">
+            <column name="ds_nome_usuario" type="varchar(255)"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.04.17" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_fundamento_legal" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_fundamento_legal">
+            <column name="co_tipo_destinacao" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_fundamento_legal"
+                baseColumnNames="co_tipo_destinacao"
+                constraintName="fk_fundamento_tipo_destinacao"
+                referencedTableName="tb_tipo_destinacao"
+                referencedColumnNames="id_tipo_destinacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.18" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_fundamento_legal" schemaName="destinacao"/>
+        </preConditions>
+
+        <update schemaName="destinacao"
+                tableName="tb_fundamento_legal">
+            <column name="co_tipo_destinacao" type="bitint" value="1"/>
+            <where>ds_fundamento_legal = 'Fundamento 1'</where>
+        </update>
+
+        <update schemaName="destinacao"
+                tableName="tb_fundamento_legal">
+            <column name="co_tipo_destinacao" type="bitint" value="2"/>
+            <where>ds_fundamento_legal = 'Fundamento 2'</where>
+        </update>
+
+    </changeSet>
+
+    <changeSet id="1.04.19" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_fundamento_legal" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="3"/>
+            <column name="ds_fundamento_legal" value="Fundamento 3"/>
+            <column name="co_tipo_destinacao" value="1"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="4"/>
+            <column name="ds_fundamento_legal" value="Fundamento 4"/>
+            <column name="co_tipo_destinacao" value="2"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="5"/>
+            <column name="ds_fundamento_legal" value="Fundamento 5"/>
+            <column name="co_tipo_destinacao" value="3"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="6"/>
+            <column name="ds_fundamento_legal" value="Fundamento 6"/>
+            <column name="co_tipo_destinacao" value="3"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="7"/>
+            <column name="ds_fundamento_legal" value="Fundamento 7"/>
+            <column name="co_tipo_destinacao" value="4"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="8"/>
+            <column name="ds_fundamento_legal" value="Fundamento 8"/>
+            <column name="co_tipo_destinacao" value="4"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="9"/>
+            <column name="ds_fundamento_legal" value="Fundamento 9"/>
+            <column name="co_tipo_destinacao" value="5"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="10"/>
+            <column name="ds_fundamento_legal" value="Fundamento 10"/>
+            <column name="co_tipo_destinacao" value="5"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="11"/>
+            <column name="ds_fundamento_legal" value="Fundamento 11"/>
+            <column name="co_tipo_destinacao" value="6"/>
+        </insert>
+
+        <insert tableName="tb_fundamento_legal" schemaName="destinacao">
+            <column name="id_fundamento_legal" value="12"/>
+            <column name="ds_fundamento_legal" value="Fundamento 12"/>
+            <column name="co_tipo_destinacao" value="6"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.04.20" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_item_verificacao_check_list" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_item_verificacao_check_list">
+            <column name="id_item_verificacao_check_list" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_item_verificacao_check_list" type="varchar(255)"/>
+            <column name="co_fundamento_legal" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_item_verificacao_check_list"
+                baseColumnNames="co_fundamento_legal"
+                constraintName="fk_item_verif_check_fundamento_legal"
+                referencedTableName="tb_fundamento_legal"
+                referencedColumnNames="id_fundamento_legal"/>
+
+
+    </changeSet>
+
+    <changeSet id="1.04.21" author="raphael.soares">
+        <addColumn schemaName="destinacao"
+                   tableName="tb_despacho">
+            <column name="ds_descricao" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.04.22" author="raphael.soares">
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="1"/>
+            <column name="ds_descricao" value="Atende aos requisitos"/>
+            <column name="tp_despacho" value="DEFAULT"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="2"/>
+            <column name="ds_descricao" value="Não atende aos requisitos"/>
+            <column name="tp_despacho" value="DEFAULT"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="3"/>
+            <column name="ds_descricao" value="Retornar pendência para o requerente"/>
+            <column name="tp_despacho" value="DEFAULT"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="4"/>
+            <column name="ds_descricao" value="Cancelar por erro/duplicidade"/>
+            <column name="tp_despacho" value="DEFAULT"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="5"/>
+            <column name="ds_descricao" value="Solicitar Manifestação de outra área"/>
+            <column name="tp_despacho" value="DEFAULT"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="6"/>
+            <column name="ds_descricao" value="De acordo com a avaliação técnica"/>
+            <column name="tp_despacho" value="SUPERVISOR"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="7"/>
+            <column name="ds_descricao" value="Retornar para análise técnica"/>
+            <column name="tp_despacho" value="SUPERVISOR"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="8"/>
+            <column name="ds_descricao" value="Alterar avaliação técnica"/>
+            <column name="tp_despacho" value="SUPERVISOR"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="9"/>
+            <column name="ds_descricao" value="Aprovo a adesão do município. Publique-se o extrato no Diário Oficial da União"/>
+            <column name="tp_despacho" value="SECRETARIO"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="10"/>
+            <column name="ds_descricao" value="Aprovo o indeferimento"/>
+            <column name="tp_despacho" value="SECRETARIO"/>
+        </insert>
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="11"/>
+            <column name="ds_descricao" value="Retornar ao Superintendente"/>
+            <column name="tp_despacho" value="SECRETARIO"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.04.23" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_item_verificacao_check_list" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_item_verificacao_check_list" schemaName="destinacao">
+            <column name="id_item_verificacao_check_list" value="1"/>
+            <column name="ds_item_verificacao_check_list" value="Os dados está de acordo com todas as exigencias?"/>
+            <column name="co_fundamento_legal" value="11"/>
+        </insert>
+
+        <insert tableName="tb_item_verificacao_check_list" schemaName="destinacao">
+            <column name="id_item_verificacao_check_list" value="2"/>
+            <column name="ds_item_verificacao_check_list" value="Foi preenchido corretamente?"/>
+            <column name="co_fundamento_legal" value="11"/>
+        </insert>
+
+        <insert tableName="tb_item_verificacao_check_list" schemaName="destinacao">
+            <column name="id_item_verificacao_check_list" value="3"/>
+            <column name="ds_item_verificacao_check_list" value="Todos as informações estão corretas?"/>
+            <column name="co_fundamento_legal" value="12"/>
+        </insert>
+
+        <insert tableName="tb_item_verificacao_check_list" schemaName="destinacao">
+            <column name="id_item_verificacao_check_list" value="4"/>
+            <column name="ds_item_verificacao_check_list" value="Os dados está de acordo com todas as exigencias?"/>
+            <column name="co_fundamento_legal" value="12"/>
+        </insert>
+
+        <insert tableName="tb_item_verificacao_check_list" schemaName="destinacao">
+            <column name="id_item_verificacao_check_list" value="5"/>
+            <column name="ds_item_verificacao_check_list" value="Tudo está correto?"/>
+            <column name="co_fundamento_legal" value="12"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.04.24" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_item_verificacao_especifica" schemaName="destinacao"/>
+        </preConditions>
+
+        <renameTable newTableName="tb_item_verificacao_especificacao"
+                     oldTableName="tb_item_verificacao_especifica"
+                     schemaName="destinacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.25" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_item_verificacao_especificacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <renameColumn columnDataType="bigint"
+                      newColumnName="co_item_verif_check_list"
+                      oldColumnName="id_item"
+                      schemaName="destinacao"
+                      tableName="tb_item_verificacao_especificacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_item_verificacao_especificacao"
+                baseColumnNames="co_item_verif_check_list"
+                constraintName="fk_item_verif_check_list_verificacao_espec"
+                referencedTableName="tb_item_verificacao_check_list"
+                referencedColumnNames="id_item_verificacao_check_list"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.26" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica">
+            <column name="co_tipo_destinacao" type="bigint"/>
+            <column name="co_fundamento_legal" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica"
+                baseColumnNames="co_tipo_destinacao"
+                constraintName="fk_tipo_destinacao_analise_tecnica"
+                referencedTableName="tb_tipo_destinacao"
+                referencedColumnNames="id_tipo_destinacao"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica"
+                baseColumnNames="co_fundamento_legal"
+                constraintName="fk_fundamento_legal_analise_tecnica"
+                referencedTableName="tb_fundamento_legal"
+                referencedColumnNames="id_fundamento_legal"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.27" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica">
+            <column name="co_requerimento" type="bigint"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.04.28" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_gestao_praia" schemaName="destinacao"/>
+        </preConditions>
+        <dropTable cascadeConstraints="true"
+                   schemaName="destinacao"
+                   tableName="tb_gestao_praia"/>
+    </changeSet>
+
+    <changeSet id="1.04.29" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_status_destinacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <renameTable newTableName="tb_status_analise_tecnica"
+                     oldTableName="tb_status_destinacao"
+                     schemaName="destinacao"/>
+    </changeSet>
+
+    <changeSet id="1.04.30" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_status_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <renameColumn newColumnName="id_status_analise_tecnica"
+                      oldColumnName="id_status_destinacao"
+                      schemaName="destinacao"
+                      tableName="tb_status_analise_tecnica"/>
+    </changeSet>
+
+    <changeSet id="1.04.31" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica">
+            <column name="co_status_analise_tecnica" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica"
+                baseColumnNames="co_status_analise_tecnica"
+                constraintName="fk_status_analise_tecnica_analise"
+                referencedTableName="tb_status_analise_tecnica"
+                referencedColumnNames="id_status_analise_tecnica"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.32" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn columnName="co_status_destinacao"
+                    schemaName="destinacao"
+                    tableName="tb_destinacao"/>
+    </changeSet>
+
+
+
+    <changeSet id="1.04.33" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_historico_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn columnName="co_status_destinacao_anterior"
+                    schemaName="destinacao"
+                    tableName="tb_historico_analise_tecnica"/>
+
+        <dropColumn columnName="co_status_destinacao_atual"
+                    schemaName="destinacao"
+                    tableName="tb_historico_analise_tecnica"/>
+
+        <addColumn schemaName="destinacao" tableName="tb_historico_analise_tecnica">
+            <column name="co_status_anaise_tecnica_anterior" type="bigint"/>
+            <column name="co_status_analise_tecnica_atual" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_historico_analise_tecnica"
+                baseColumnNames="co_status_anaise_tecnica_anterior"
+                constraintName="fk_status_analise_tecnica_anterior_historico"
+                referencedTableName="tb_status_analise_tecnica"
+                referencedColumnNames="id_status_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_historico_analise_tecnica"
+                baseColumnNames="co_status_analise_tecnica_atual"
+                constraintName="fk_status_analise_tecnica_atual_historico"
+                referencedTableName="tb_status_analise_tecnica"
+                referencedColumnNames="id_status_analise_tecnica"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.34" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica">
+            <column name="co_usuario" type="bigint"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.04.35" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_status_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_status_analise_tecnica" schemaName="destinacao">
+            <column name="id_status_analise_tecnica" value="9"/>
+            <column name="ds_descricao" value="Cancelado"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.04.36" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_status_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="12"/>
+            <column name="ds_descricao" value="Retornar para análise chefia"/>
+            <column name="tp_despacho" value="SUPERVISOR"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.04.37" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_despacho" schemaName="destinacao"/>
+        </preConditions>
+
+        <update schemaName="destinacao"
+                tableName="tb_despacho">
+            <column name="tp_despacho" type="bitint" value="CHEFIA"/>
+            <where>id_despacho IN(6,7,8)</where>
+        </update>
+
+        <update schemaName="destinacao"
+                tableName="tb_despacho">
+            <column name="tp_despacho" type="bitint" value="SUPERINTENDENTE"/>
+            <where>id_despacho = 12</where>
+        </update>
+
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="13"/>
+            <column name="ds_descricao" value="De acordo com a avaliação técnica"/>
+            <column name="tp_despacho" value="SUPERINTENDENTE"/>
+        </insert>
+
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="14"/>
+            <column name="ds_descricao" value="Retornar para análise técnica"/>
+            <column name="tp_despacho" value="SUPERINTENDENTE"/>
+        </insert>
+
+        <insert tableName="tb_despacho" schemaName="destinacao">
+            <column name="id_despacho" value="15"/>
+            <column name="ds_descricao" value="Alterar avaliação técnica"/>
+            <column name="tp_despacho" value="SUPERINTENDENTE"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.04.38" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica_despacho" schemaName="destinacao"/>
+        </preConditions>
+
+        <renameTable newTableName="tb_analise_tecnica_despacho_tecnico"
+                     oldTableName="tb_analise_tecnica_despacho"
+                     schemaName="destinacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.39" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_analise_tecnica_despacho_chefia" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_analise_tecnica_despacho_chefia">
+            <column name="id_analise_tecnica" type="bigint"/>
+            <column name="id_despacho" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho_chefia"
+                baseColumnNames="id_analise_tecnica"
+                constraintName="fk_analise_tecnica_despacho_chefia"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho_chefia"
+                baseColumnNames="id_despacho"
+                constraintName="fk_despacho_analise_tecnica_chefia"
+                referencedTableName="tb_despacho"
+                referencedColumnNames="id_despacho"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.40" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_analise_tecnica_despacho_superintendente" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_analise_tecnica_despacho_superintendente">
+            <column name="id_analise_tecnica" type="bigint"/>
+            <column name="id_despacho" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho_superintendente"
+                baseColumnNames="id_analise_tecnica"
+                constraintName="fk_analise_tecnica_despacho_superintendente"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho_superintendente"
+                baseColumnNames="id_despacho"
+                constraintName="fk_despacho_analise_tecnica_superintendente"
+                referencedTableName="tb_despacho"
+                referencedColumnNames="id_despacho"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.41" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_analise_tecnica_despacho_secretario" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_analise_tecnica_despacho_secretario">
+            <column name="id_analise_tecnica" type="bigint"/>
+            <column name="id_despacho" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho_secretario"
+                baseColumnNames="id_analise_tecnica"
+                constraintName="fk_analise_tecnica_despacho_secretario"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica_despacho_secretario"
+                baseColumnNames="id_despacho"
+                constraintName="fk_despacho_analise_tecnica_secretario"
+                referencedTableName="tb_despacho"
+                referencedColumnNames="id_despacho"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.42" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_status_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_status_analise_tecnica" schemaName="destinacao">
+            <column name="id_status_analise_tecnica" value="10"/>
+            <column name="ds_descricao" value="Cancelado"/>
+        </insert>
+
+        <insert tableName="tb_status_analise_tecnica" schemaName="destinacao">
+            <column name="id_status_analise_tecnica" value="11"/>
+            <column name="ds_descricao" value="Indeferido"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.04.43" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_status_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <update schemaName="destinacao" tableName="tb_status_analise_tecnica">
+            <column name="ds_descricao" type="bitint" value="Aguardando Requerente"/>
+            <where>id_status_analise_tecnica = 9</where>
+        </update>
+
+    </changeSet>
+
+    <changeSet id="1.04.44" author="guilherme.lima">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_publicacao" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_publicacao">
+            <column name="id_publicacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="nu_pagina" type="bigint"/>
+            <column name="nu_secao" type="bigint"/>
+            <column name="dt_publicacao" type="date"/>
+        </createTable>
+
+        <createSequence sequenceName="tb_publicacao_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.45" author="guilherme.lima">
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica">
+            <column name="co_publicacao" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_analise_tecnica"
+                baseColumnNames="co_publicacao"
+                constraintName="fk_publicacao"
+                referencedTableName="tb_publicacao"
+                referencedColumnNames="id_publicacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.46" author="diego.alves">
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica_despacho_tecnico">
+            <column name="ds_justificativa" type="varchar(255)"/>
+        </addColumn>
+
+        <addPrimaryKey columnNames="id_analise_tecnica, id_despacho"
+                       constraintName="pk_analise_tecnico_analise_despacho"
+                       schemaName="destinacao"
+                       tableName="tb_analise_tecnica_despacho_tecnico"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.47" author="diego.alves">
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica_despacho_chefia">
+            <column name="ds_justificativa" type="varchar(255)"/>
+        </addColumn>
+
+        <addPrimaryKey columnNames="id_analise_tecnica, id_despacho"
+                       constraintName="pk_analise_chefia_analise_despacho"
+                       schemaName="destinacao"
+                       tableName="tb_analise_tecnica_despacho_chefia"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.48" author="diego.alves">
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica_despacho_superintendente">
+            <column name="ds_justificativa" type="varchar(255)"/>
+        </addColumn>
+
+        <addPrimaryKey columnNames="id_analise_tecnica, id_despacho"
+                       constraintName="pk_analise_superintendente_analise_despacho"
+                       schemaName="destinacao"
+                       tableName="tb_analise_tecnica_despacho_superintendente"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.49" author="diego.alves">
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica_despacho_secretario">
+            <column name="ds_justificativa" type="varchar(255)"/>
+        </addColumn>
+
+        <addPrimaryKey columnNames="id_analise_tecnica, id_despacho"
+                       constraintName="pk_analise_secretario_analise_despacho"
+                       schemaName="destinacao"
+                       tableName="tb_analise_tecnica_despacho_secretario"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.50" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_documento_analise" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_documento_analise">
+            <column name="id_documento_analise" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_documento" type="bigint"/>
+            <column name="ic_resposta" type="boolean"/>
+            <column name="ds_observacao" type="varchar(255)"/>
+            <column name="ds_tipo_documento" type="varchar(255)"/>
+            <column name="co_analise_tecnica" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_documento_analise"
+                baseColumnNames="co_analise_tecnica"
+                constraintName="fk_documento_analise"
+                referencedTableName="tb_analise_tecnica"
+                referencedColumnNames="id_analise_tecnica"/>
+
+        <createSequence sequenceName="tb_documento_analise_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.51" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+                <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn columnName="ds_justificativa"
+                    schemaName="destinacao"
+                    tableName="tb_analise_tecnica"/>
+
+
+    </changeSet>
+
+    <changeSet id="1.04.52" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_obs_documento_pendente"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_analise_tecnica"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.53" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_item_verificacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_observacao"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_item_verificacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.54" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_documento_analise" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_tipo_documento"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_documento_analise"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.55" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_item_verificacao_especificacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_observacao"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_item_verificacao_especificacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.56" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica_despacho_tecnico" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_justificativa"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_analise_tecnica_despacho_tecnico"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.57" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica_despacho_chefia" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_justificativa"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_analise_tecnica_despacho_chefia"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.58" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica_despacho_superintendente" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_justificativa"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_analise_tecnica_despacho_superintendente"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.59" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica_despacho_secretario" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_justificativa"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_analise_tecnica_despacho_secretario"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.60" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica_despacho_tecnico" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_justificativa"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_analise_tecnica_despacho_tecnico"/>
+
+    </changeSet>
+
+    <changeSet id="1.04.61" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_analise_tecnica">
+            <column name="dt_envio_publicacao" type="date"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.04.62" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_historico_analise_tecnica" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_justificativa"
+                        newDataType="varchar(500)"
+                        schemaName="destinacao"
+                        tableName="tb_historico_analise_tecnica"/>
+
+    </changeSet>
+
+
+
+</databaseChangeLog>

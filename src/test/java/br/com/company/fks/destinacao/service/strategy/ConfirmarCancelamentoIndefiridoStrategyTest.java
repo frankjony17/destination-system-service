@@ -1,0 +1,47 @@
+package br.com.company.fks.destinacao.service.strategy;
+
+import br.com.company.fks.destinacao.dominio.entidades.CancelamentoEncerramento;
+import br.com.company.fks.destinacao.dominio.entidades.Destinacao;
+import br.com.company.fks.destinacao.repository.CancelamentoEncerramentoUtilizacaoRepository;
+import br.com.company.fks.destinacao.service.DestinacaoPendenciaService;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.stereotype.Repository;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
+
+@RunWith(PowerMockRunner.class)
+public class ConfirmarCancelamentoIndefiridoStrategyTest {
+
+    @InjectMocks
+    private ConfirmarCancelamentoIndefiridoStrategy confirmarCancelamentoIndefiridoStrategy;
+
+    @Mock
+    private CancelamentoEncerramentoUtilizacaoRepository repository;
+
+    @Mock
+    private CancelamentoEncerramento cancelamentoEncerramento;
+
+    @Mock
+    private DestinacaoPendenciaService destinacaoPendenciaService;
+
+    @Mock
+    private Destinacao destinacao;
+
+    @Before
+    public void setUp(){
+        when(repository.save(any(CancelamentoEncerramento.class))).thenReturn(cancelamentoEncerramento);
+    }
+
+    @Test
+    public void confirmarCancelamento(){
+        confirmarCancelamentoIndefiridoStrategy.confirmarCancelamento();
+    }
+}

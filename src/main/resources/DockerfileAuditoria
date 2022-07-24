@@ -1,0 +1,4 @@
+FROM hub.docker.planejamento.gov.br/liquibase-mp:3.5.3
+
+COPY db/auditoria/changelog-master-auditoria.xml /changelogs.xml
+COPY db/auditoria /changelogs

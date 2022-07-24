@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.02.01" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_tipo_licitacao" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_tipo_licitacao">
+            <column name="id_tipo_licitacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_licitacao" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.02.02" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_licitacao" schemaName="destinacao"/>
+            <not>
+                <tableExists tableName="tb_licitacao" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_licitacao">
+            <column name="id_licitacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_tipo_licitacao" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="num_processo" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="num_edital" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="num_pagina" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="num_secao" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dt_publicacao" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_licitacao"
+                baseColumnNames="co_tipo_licitacao"
+                constraintName="fk_tipo_licitacao"
+                referencedTableName="tb_tipo_licitacao"
+                referencedColumnNames="id_tipo_licitacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.03" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao" schemaName="destinacao"/>
+            <tableExists tableName="tb_licitacao" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_destinacao">
+            <column name="co_licitacao" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao"
+                baseColumnNames="co_licitacao"
+                constraintName="fk_licitacao"
+                referencedTableName="tb_licitacao"
+                referencedColumnNames="id_licitacao"/>
+    </changeSet>
+
+    <changeSet id="1.02.04" author="diego.alves">
+
+        <createSequence sequenceName="tb_licitacao_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.05" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_licitacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_licitacao" schemaName="destinacao">
+            <column name="id_tipo_licitacao" value="1"/>
+            <column name="ds_tipo_licitacao" value="Dispensa"/>
+        </insert>
+
+        <insert tableName="tb_tipo_licitacao" schemaName="destinacao">
+            <column name="id_tipo_licitacao" value="2"/>
+            <column name="ds_tipo_licitacao" value="Inexigibilidade"/>
+        </insert>
+
+        <insert tableName="tb_tipo_licitacao" schemaName="destinacao">
+            <column name="id_tipo_licitacao" value="3"/>
+            <column name="ds_tipo_licitacao" value="Concorrência"/>
+        </insert>
+
+        <insert tableName="tb_tipo_licitacao" schemaName="destinacao">
+            <column name="id_tipo_licitacao" value="4"/>
+            <column name="ds_tipo_licitacao" value="Leilão"/>
+        </insert>
+
+    </changeSet>
+
+
+    <changeSet id="1.02.06" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_tipo_periocidade" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_tipo_periocidade">
+            <column name="id_tipo_periocidade" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_periocidade" type="varchar"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.02.07" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_periocidade" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_periocidade" schemaName="destinacao">
+            <column name="id_tipo_periocidade" value="1"/>
+            <column name="ds_tipo_periocidade" value="Anual"/>
+        </insert>
+
+        <insert tableName="tb_tipo_periocidade" schemaName="destinacao">
+            <column name="id_tipo_periocidade" value="2"/>
+            <column name="ds_tipo_periocidade" value="Mensal"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.02.08" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_tipo_reajuste" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_tipo_reajuste">
+            <column name="id_tipo_reajuste" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_reajuste" type="varchar"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.02.09" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_reajuste" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="1"/>
+            <column name="ds_tipo_reajuste" value="IPCA"/>
+        </insert>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="2"/>
+            <column name="ds_tipo_reajuste" value="IPCA-E"/>
+        </insert>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="3"/>
+            <column name="ds_tipo_reajuste" value="IPC-BRASIL"/>
+        </insert>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="4"/>
+            <column name="ds_tipo_reajuste" value="IPC-SP"/>
+        </insert>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="5"/>
+            <column name="ds_tipo_reajuste" value="INPC"/>
+        </insert>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="6"/>
+            <column name="ds_tipo_reajuste" value="IGP-M"/>
+        </insert>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="7"/>
+            <column name="ds_tipo_reajuste" value="IGP-DI"/>
+        </insert>
+
+        <insert tableName="tb_tipo_reajuste" schemaName="destinacao">
+            <column name="id_tipo_reajuste" value="8"/>
+            <column name="ds_tipo_reajuste" value="SELIC"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.02.10" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_tipo_juro" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_tipo_juro">
+            <column name="id_tipo_juro" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_juro" type="varchar"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.02.11" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_juro" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_juro" schemaName="destinacao">
+            <column name="id_tipo_juro" value="1"/>
+            <column name="ds_tipo_juro" value="Manual"/>
+        </insert>
+
+        <insert tableName="tb_tipo_juro" schemaName="destinacao">
+            <column name="id_tipo_juro" value="2"/>
+            <column name="ds_tipo_juro" value="Mensal"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.02.12" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_destinacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_destinacao" schemaName="destinacao">
+            <column name="id_tipo_destinacao" value="2"/>
+            <column name="ds_tipo_destinacao" value="VENDA"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.02.13" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_financeiro" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_financeiro">
+            <column name="id_financeiro" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="numFFC" type="bigint"/>
+            <column name="num_preco" type="number"/>
+            <column name="co_tipo_periocidade" type="bigint"/>
+            <column name="dt_inicio_cobranca" type="date"/>
+            <column name="co_tipo_indice_reajuste_anual" type="bigint"/>
+            <column name="carenciaMeses" type="number"/>
+            <column name="num_reajuste_contratual" type="bigint"/>
+            <column name="nu_vencimento_mensal" type="bigint"/>
+            <column name="co_tipo_juros_mensal" type="bigint"/>
+            <column name="num_juros_mensal" type="number"/>
+            <column name="co_tipo_indice_reajuste_mensal" type="bigint"/>
+            <column name="nu_multa_inadimplencia" type="bigint"/>
+        </createTable>
+
+        <createSequence sequenceName="tb_financeiro_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_tipo_periocidade"
+                constraintName="fk_tipo_periocidade"
+                referencedTableName="tb_tipo_periocidade"
+                referencedColumnNames="id_tipo_periocidade"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_tipo_indice_reajuste_anual"
+                constraintName="fk_tipo_indice_reajuste_anual"
+                referencedTableName="tb_tipo_reajuste"
+                referencedColumnNames="id_tipo_reajuste"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_tipo_juros_mensal"
+                constraintName="fk_tipo_juro_mensal"
+                referencedTableName="tb_tipo_juro"
+                referencedColumnNames="id_tipo_juro"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_tipo_indice_reajuste_mensal"
+                constraintName="fk_tipo_indice_reajuste_mensal"
+                referencedTableName="tb_tipo_reajuste"
+                referencedColumnNames="id_tipo_reajuste"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.14" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_contrato" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_contrato">
+            <column name="dt_final" type="date"/>
+        </addColumn>
+
+    </changeSet>
+
+
+    <changeSet id="1.02.15" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_tipo_pagamento" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_tipo_pagamento">
+            <column name="id_tipo_pagamento" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_pagamento" type="varchar"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.02.16" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_pagamento" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_pagamento" schemaName="destinacao">
+            <column name="id_tipo_pagamento" value="1"/>
+            <column name="ds_tipo_pagamento" value="À Vista"/>
+        </insert>
+
+        <insert tableName="tb_tipo_pagamento" schemaName="destinacao">
+            <column name="id_tipo_pagamento" value="2"/>
+            <column name="ds_tipo_pagamento" value="Parcelado"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.02.17" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_tipo_moeda" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_tipo_moeda">
+            <column name="id_tipo_moeda" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_moeda" type="varchar"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="1.02.18" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_moeda" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_moeda" schemaName="destinacao">
+            <column name="id_tipo_moeda" value="1"/>
+            <column name="ds_tipo_moeda" value="Dolar"/>
+        </insert>
+
+        <insert tableName="tb_tipo_moeda" schemaName="destinacao">
+            <column name="id_tipo_moeda" value="2"/>
+            <column name="ds_tipo_moeda" value="Real"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.02.19" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_financeiro" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_financeiro">
+            <column name="num_parcelas" type="bigint"/>
+            <column name="co_tipo_pagamento" type="bigint"/>
+            <column name="co_tipo_moeda" type="bigint"/>
+            <column name="num_valor_entrada" type="number"/>
+            <column name="num_valor_financidado" type="number"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_tipo_pagamento"
+                constraintName="fk_tipo_pagamento"
+                referencedTableName="tb_tipo_pagamento"
+                referencedColumnNames="id_tipo_pagamento"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_financeiro"
+                baseColumnNames="co_tipo_moeda"
+                constraintName="fk_tipo_moeda"
+                referencedTableName="tb_tipo_moeda"
+                referencedColumnNames="id_tipo_moeda"/>
+
+    </changeSet>
+    <changeSet id="1.02.20" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_financeiro">
+            <column name="num_valor" type="number"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.21" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_imovel">
+            <column name="num_valor" type="number"/>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="1.02.22" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_financeiro" schemaName="destinacao"/>
+        </preConditions>
+        <dropColumn columnName="num_valor" schemaName="destinacao" tableName="tb_financeiro"/>
+    </changeSet>
+
+    <changeSet id="1.02.23" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_financeiro" schemaName="destinacao"/>
+        </preConditions>
+        <dropColumn columnName="num_reajuste_contratual" schemaName="destinacao" tableName="tb_financeiro"/>
+        <addColumn schemaName="destinacao" tableName="tb_imovel">
+            <column name="num_reajuste_contratual" type="varchar(6)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.02.24" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_destinacao">
+            <column name="co_financeiro" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao"
+                baseColumnNames="co_financeiro"
+                constraintName="fk_financeiro_destinacao"
+                referencedTableName="tb_financeiro"
+                referencedColumnNames="id_financeiro"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.25" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_venda" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_venda">
+            <column name="id_venda" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_contrato" type="bigint"/>
+            <column name="co_certidao_cartorial" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_venda"
+                baseColumnNames="co_contrato"
+                constraintName="fk_venda_contrato"
+                referencedTableName="tb_contrato"
+                referencedColumnNames="id_contrato"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_venda"
+                baseColumnNames="co_certidao_cartorial"
+                constraintName="fk_venda_certidao_cartorial"
+                referencedTableName="tb_certidao_cartorial"
+                referencedColumnNames="id_certidao_cartorial"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.26" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_endereco" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_endereco">
+            <column name="id_endereco" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_cep" type="varchar(9)"/>
+            <column name="ds_tipo_logradouro" type="varchar(80)"/>
+            <column name="ds_logradouro" type="varchar(200)"/>
+            <column name="ds_numero" type="varchar(20)"/>
+            <column name="ds_complemento" type="varchar(100)"/>
+            <column name="ds_municipio" type="varchar(100)"/>
+            <column name="ds_bairro" type="varchar(100)"/>
+            <column name="ds_uf" type="varchar(2)"/>
+            <column name="ds_pais" type="varchar(100)"/>
+            <column name="ds_cidade_exterior" type="varchar(200)"/>
+            <column name="ds_codigo_postal" type="varchar(100)"/>
+        </createTable>
+
+        <createSequence sequenceName="tb_endereco_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.27" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_endereco" schemaName="destinacao"/>
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_imovel">
+            <column name="co_endereco" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_imovel"
+                baseColumnNames="co_endereco"
+                constraintName="fk_imovel_endereco"
+                referencedTableName="tb_endereco"
+                referencedColumnNames="id_endereco"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.28" author="diego.alves">
+        <renameColumn newColumnName="nu_processo"
+                      oldColumnName="num_processo"
+                      schemaName="destinacao"
+                      tableName="tb_licitacao"/>
+
+        <renameColumn newColumnName="nu_edital"
+                      oldColumnName="num_edital"
+                      schemaName="destinacao"
+                      tableName="tb_licitacao"/>
+
+        <renameColumn newColumnName="nu_pagina"
+                      oldColumnName="num_pagina"
+                      schemaName="destinacao"
+                      tableName="tb_licitacao"/>
+
+        <renameColumn newColumnName="nu_secao"
+                      oldColumnName="num_secao"
+                      schemaName="destinacao"
+                      tableName="tb_licitacao"/>
+    </changeSet>
+
+    <changeSet id="1.02.29" author="diego.alves">
+
+        <renameColumn newColumnName="nu_valor"
+                      oldColumnName="num_valor"
+                      schemaName="destinacao"
+                      tableName="tb_imovel"/>
+
+    </changeSet>
+
+
+    <changeSet id="1.02.30" author="diego.alves">
+
+        <renameColumn newColumnName="nu_qtd_meses_carencia"
+                      oldColumnName="carenciaMeses"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="nu_valor"
+                      oldColumnName="num_preco"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="nu_ffc"
+                      oldColumnName="numFFC"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="ds_dia_vencimento_mensal"
+                      oldColumnName="nu_vencimento_mensal"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="vl_juros_mensal"
+                      oldColumnName="num_juros_mensal"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="vl_multa_inadimplencia"
+                      oldColumnName="nu_multa_inadimplencia"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="nu_qtd_parcelas"
+                      oldColumnName="num_parcelas"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="vl_entrada"
+                      oldColumnName="num_valor_entrada"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+        <renameColumn newColumnName="vl_financidado"
+                      oldColumnName="num_valor_financidado"
+                      schemaName="destinacao"
+                      tableName="tb_financeiro"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.31" author="diego.alves">
+        <dropColumn columnName="num_reajuste_contratual" schemaName="destinacao" tableName="tb_imovel"/>
+
+        <addColumn schemaName="destinacao" tableName="tb_financeiro">
+            <column name="ds_mes_ano_reajuste" type="varchar(6)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.02.32" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_licitacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="ds_dia_vencimento_mensal"
+                        newDataType="char(2)"
+                        schemaName="destinacao"
+                        tableName="tb_financeiro"/>
+
+        <modifyDataType columnName="nu_qtd_meses_carencia"
+                        newDataType="bigint"
+                        schemaName="destinacao"
+                        tableName="tb_financeiro"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.33" author="diego.alves">
+
+        <update schemaName="destinacao"
+                tableName="tb_tipo_juro">
+            <column name="ds_tipo_juro" value="Índice"/>
+            <where>id_tipo_juro = 2</where>
+        </update>
+
+    </changeSet>
+
+
+    <changeSet id="1.02.34" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_tipo_posse" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_tipo_posse">
+            <column name="id_tipo_posse" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_posse" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="1.02.35" author="guilherme.ozaka">
+        <insert schemaName="destinacao"
+                tableName="tb_tipo_destinacao">
+            <column name="id_tipo_destinacao" value="3"/>
+            <column name="ds_tipo_destinacao" value="Posse Informal"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.02.36" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_imovel" schemaName="destinacao"/>
+            <tableExists tableName="tb_tipo_posse" schemaName="destinacao"/>
+            <not>
+                <tableExists tableName="tb_posse_informal" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_posse_informal">
+            <column name="id_posse_informal" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_imovel" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_tipo_posse" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_nome_entidade" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_cpf" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_posse_informal"
+                baseColumnNames="co_imovel"
+                constraintName="fk_imovel_posse_informal"
+                referencedTableName="tb_imovel"
+                referencedColumnNames="id_imovel"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_posse_informal"
+                baseColumnNames="co_tipo_posse"
+                constraintName="fk_tipo_posse"
+                referencedTableName="tb_tipo_posse"
+                referencedColumnNames="id_tipo_posse"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.37" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_posse_informal" schemaName="destinacao"/>
+            <not>
+                <tableExists tableName="tb_interessado" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="destinacao" tableName="tb_interessado">
+            <column name="id_interessado" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_posse_informal" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_cpf_cnpj" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_nome_razao_social" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_ug" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nu_area_utilizada" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_interessado"
+                baseColumnNames="co_posse_informal"
+                constraintName="fk_posse_informal"
+                referencedTableName="tb_posse_informal"
+                referencedColumnNames="id_posse_informal"/>
+
+        <createSequence sequenceName="tb_interessado_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.38" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_destinacao_posse_informal" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_destinacao_posse_informal">
+            <column name="id_destinacao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_posse_informal" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao_posse_informal"
+                baseColumnNames="id_destinacao"
+                constraintName="fk_destinacao"
+                referencedTableName="tb_destinacao"
+                referencedColumnNames="id_destinacao"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_destinacao_posse_informal"
+                baseColumnNames="id_posse_informal"
+                constraintName="fk_posse_informal"
+                referencedTableName="tb_posse_informal"
+                referencedColumnNames="id_posse_informal"/>
+    </changeSet>
+
+    <changeSet id="1.02.39" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_interessados_fotos" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_interessados_fotos">
+            <column name="id_interessado" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_arquivo" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_interessados_fotos"
+                baseColumnNames="id_interessado"
+                constraintName="fk_interessado"
+                referencedTableName="tb_interessado"
+                referencedColumnNames="id_interessado"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_interessados_fotos"
+                baseColumnNames="id_arquivo"
+                constraintName="fk_arquivo"
+                referencedTableName="tb_arquivo"
+                referencedColumnNames="id_arquivo"/>
+    </changeSet>
+
+    <changeSet id="1.02.40" author="guilherme.ozaka">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_posse" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_posse" schemaName="destinacao">
+            <column name="id_tipo_posse" value="1"/>
+            <column name="ds_tipo_posse" value="Individual"/>
+        </insert>
+
+        <insert tableName="tb_tipo_posse" schemaName="destinacao">
+            <column name="id_tipo_posse" value="2"/>
+            <column name="ds_tipo_posse" value="Coletivo sem entidade representativa"/>
+        </insert>
+
+        <insert tableName="tb_tipo_posse" schemaName="destinacao">
+            <column name="id_tipo_posse" value="3"/>
+            <column name="ds_tipo_posse" value="Coletivo com entidade representativa"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="1.02.41" author="diego.alves">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_licitacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <modifyDataType columnName="nu_processo"
+                        newDataType="varchar(100)"
+                        schemaName="destinacao"
+                        tableName="tb_licitacao"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.42" author="diego.alves">
+        <dropNotNullConstraint columnDataType="bigint"
+                               columnName="nu_edital"
+                               schemaName="destinacao"
+                               tableName="tb_licitacao"/>
+    </changeSet>
+
+    <changeSet id="1.02.43" author="diego.alves">
+        <update schemaName="destinacao"
+                tableName="tb_tipo_destinacao">
+            <column name="ds_tipo_destinacao" value="Venda"/>
+            <where>id_tipo_destinacao = 2</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="1.02.44" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_ato_autorizativo" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_ato_autorizativo">
+            <column name="ds_processo_sei" type="varchar(100)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.02.45" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_posse_informal" schemaName="destinacao"/>
+        </preConditions>
+        <renameColumn newColumnName="ds_cnpj"
+                      oldColumnName="ds_cpf"
+                      schemaName="destinacao"
+                      tableName="tb_posse_informal"/>
+
+    </changeSet>
+
+    <changeSet id="1.02.46" author="guilherme.lima">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_posse_informal" schemaName="destinacao"/>
+        </preConditions>
+        <dropNotNullConstraint columnDataType="varchar"
+                               columnName="ds_nome_entidade"
+                               schemaName="destinacao"
+                               tableName="tb_posse_informal"/>
+
+        <dropNotNullConstraint columnDataType="varchar"
+                               columnName="ds_cnpj"
+                               schemaName="destinacao"
+                               tableName="tb_posse_informal"/>
+    </changeSet>
+
+    <changeSet id="1.02.47" author="guilherme.lima">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_interessado" schemaName="destinacao"/>
+        </preConditions>
+        <dropNotNullConstraint columnDataType="varchar"
+                               columnName="ds_nome_razao_social"
+                               schemaName="destinacao"
+                               tableName="tb_interessado"/>
+
+        <dropNotNullConstraint columnDataType="varchar"
+                               columnName="ds_ug"
+                               schemaName="destinacao"
+                               tableName="tb_interessado"/>
+    </changeSet>
+
+    <changeSet id="1.02.48" author="guilherme.lima">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_interessado" schemaName="destinacao"/>
+        </preConditions>
+        <dropNotNullConstraint columnDataType="bigint"
+                               columnName="co_posse_informal"
+                               schemaName="destinacao"
+                               tableName="tb_interessado"/>
+    </changeSet>
+
+</databaseChangeLog>

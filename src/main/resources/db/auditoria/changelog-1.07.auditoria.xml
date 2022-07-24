@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.07.1" author="haillanderson.silva">
+        <createTable schemaName="aud_destinacao" tableName="tb_cancelamento_aud">
+            <column name="id_cancelamento" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="ds_cpf_responsavel" type="varchar(20)"/>
+            <column name="dt_cancelamento" type="datetime"/>
+            <column name="co_motivo_cancelamento" type="bigint"/>
+            <column name="ds_observacao" type="text"/>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_cancelamento_aud" columnNames="id_cancelamento,rev" constraintName="pk_cancelamento" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_cancelamento_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"/>
+    </changeSet>
+    
+        
+    <changeSet id="1.07.2" author="haillanderson.silva">
+        <createTable tableName="tb_cancelamento_arquivo_aud" schemaName="aud_destinacao">
+            <column name="id_cancelamento" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="id_arquivo" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_cancelamento_arquivo_aud" columnNames="id_cancelamento, id_arquivo,rev" constraintName="pk_cancelamento_arquivo" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_cancelamento_arquivo_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"/>
+    </changeSet>
+
+    <changeSet id="1.07.3" author="rogerio.feitoza">
+        <createTable schemaName="aud_destinacao" tableName="tb_permissao_uso_imovel_funcional_aud">
+            <column name="id_permissao_uso_imovel_funcional" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="rev" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="revtype" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="aud_destinacao" tableName="tb_permissao_uso_imovel_funcional_aud" columnNames="id_permissao_uso_imovel_funcional,rev"
+                       constraintName="pk_id_permissao_uso_imovel_funcional" />
+
+        <addForeignKeyConstraint constraintName="fk_rev"
+                                 baseTableName="tb_permissao_uso_imovel_funcional_aud"
+                                 baseColumnNames="rev"
+                                 baseTableSchemaName="aud_destinacao"
+                                 referencedTableName="tb_revision_aud"
+                                 referencedColumnNames="id"
+                                 referencedTableSchemaName="aud_destinacao"/>
+    </changeSet>
+
+</databaseChangeLog>

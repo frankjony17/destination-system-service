@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet author="felipe.melo" id="7.09.01">
+        <createTable tableName="tb_encerramento_destinacao" schemaName="destinacao">
+            <column name="id_encerramento_destinacao" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="ds_nome_responsavel_tecnico" type="varchar(255)"/>
+            <column name="ds_cpf_responsavel_tecnico" type="varchar(11)"/>
+            <column name="ds_nome_superintendente" type="varchar(255)"/>
+            <column name="ds_cpf_superintendente" type="varchar(11)"/>
+            <column name="dt_encerramento_destinacao" type="date"/>
+            <column name="ds_motivo_encerramento_destinacao" type="varchar(255)"/>
+            <column name="ds_observacao_motivo" type="text"/>
+            <column name="ds_despacho_encerramento_destinacao" type="varchar(255)"/>
+            <column name="ds_observacao_despacho" type="text"/>
+        </createTable>
+        <addPrimaryKey columnNames="id_encerramento_destinacao"
+                       constraintName="pk_encerramento_destinacao"
+                       schemaName="destinacao"
+                       tableName="tb_encerramento_destinacao"/>
+        <createSequence sequenceName="tb_encerramento_destinacao_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+
+    <changeSet author="felipe.melo" id="7.09.02">
+        <preConditions>
+            <tableExists schemaName="destinacao" tableName="tb_encerramento_destinacao"/>
+            <tableExists schemaName="destinacao" tableName="tb_arquivo"/>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_encerramento_destinacao_arquivo">
+            <column name="co_encerramento_destinacao" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_arquivo" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey constraintName="pk_encerramento_destinacao_arquivo"
+                       schemaName="destinacao"
+                       tableName="tb_encerramento_destinacao_arquivo"
+                       columnNames="co_encerramento_destinacao, co_arquivo"/>
+        <addForeignKeyConstraint
+                constraintName="fk_encerramento_destinacao_arquivo"
+                baseTableName="tb_encerramento_destinacao_arquivo" baseColumnNames="co_encerramento_destinacao"
+                referencedTableName="tb_encerramento_destinacao" referencedColumnNames="id_encerramento_destinacao"
+                baseTableSchemaName="destinacao" referencedTableSchemaName="destinacao" />
+        <addForeignKeyConstraint
+                constraintName="fk_arquivo_encerramento_destinacao"
+                baseTableName="tb_encerramento_destinacao_arquivo" baseColumnNames="co_arquivo"
+                referencedTableName="tb_arquivo" referencedColumnNames="id_arquivo"
+                baseTableSchemaName="destinacao" referencedTableSchemaName="destinacao" />
+    </changeSet>
+
+    <changeSet author="felipe.melo" id="7.09.03">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao" schemaName="destinacao"/>
+            <tableExists tableName="tb_encerramento_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_destinacao" schemaName="destinacao">
+            <column name="co_encerramento_destinacao" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                constraintName="fk_destinacao_encerramento_destinacao"
+                baseTableName="tb_destinacao" baseColumnNames="co_encerramento_destinacao"
+                referencedTableName="tb_encerramento_destinacao" referencedColumnNames="id_encerramento_destinacao"
+                baseTableSchemaName="destinacao" referencedTableSchemaName="destinacao" />
+    </changeSet>
+
+    <changeSet author="felipe.melo" id="7.09.04">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_encerramento_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn tableName="tb_encerramento_destinacao" schemaName="destinacao">
+            <column name="ic_ativo" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="7.09.05" author="felipe.melo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinacao" schemaName="destinacao"/>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="tb_destinacao" constraintName="fk_destinacao_encerramento_destinacao"
+                                  baseTableSchemaName="destinacao"/>
+        <dropColumn tableName="tb_destinacao" schemaName="destinacao" columnName="co_encerramento_destinacao"/>
+        <addColumn tableName="tb_encerramento_destinacao" schemaName="destinacao">
+            <column name="co_destinacao" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                constraintName="fk_encerramento__destinacao"
+                baseTableName="tb_encerramento_destinacao" baseColumnNames="co_destinacao"
+                referencedTableName="tb_destinacao" referencedColumnNames="id_destinacao"
+                baseTableSchemaName="destinacao" referencedTableSchemaName="destinacao" />
+    </changeSet>
+
+    <changeSet id="7.09.06" author="felipe.melo">
+            <preConditions onFail="MARK_RAN">
+                <tableExists tableName="tb_pendencia" schemaName="destinacao"/>
+            </preConditions>
+
+            <insert tableName="tb_pendencia" schemaName="destinacao">
+                <column name="id_pendencia" value="7"/>
+                <column name="ds_pendencia" value="Confirmar Encerramento de Destinação"/>
+                <column name="ds_modulo" value="DESTINACAO"/>
+            </insert>
+
+            <insert tableName="tb_pendencia" schemaName="destinacao">
+                <column name="id_pendencia" value="8"/>
+                <column name="ds_pendencia" value="Encerramento Retornado"/>
+                <column name="ds_modulo" value="DESTINACAO"/>
+            </insert>
+    </changeSet>
+
+    <changeSet id="7.09.07" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_transferencia" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_transferencia" schemaName="destinacao" columnName="nu_processo"/>
+        <dropColumn tableName="tb_transferencia" schemaName="destinacao" columnName="co_base_legal"/>
+        <addColumn tableName="tb_transferencia" schemaName="destinacao">
+            <column name="co_tipo_destinatario" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                constraintName="fk_transferencia_destinatario"
+                baseTableName="tb_transferencia" baseColumnNames="co_tipo_destinatario"
+                referencedTableName="tb_tipo_destinatario" referencedColumnNames="id_tipo_destinatario"
+                baseTableSchemaName="destinacao" referencedTableSchemaName="destinacao" />
+    </changeSet>
+
+    <changeSet id="7.09.08" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinatario" schemaName="destinacao"/>
+        </preConditions>
+
+        <dropColumn tableName="tb_destinatario" schemaName="destinacao" columnName="co_tipo_destinatario"/>
+        <dropColumn tableName="tb_destinatario" schemaName="destinacao" columnName="co_endereco"/>
+        <dropColumn tableName="tb_destinatario" schemaName="destinacao" columnName="ds_razao_social"/>
+        <addColumn tableName="tb_destinatario" schemaName="destinacao">
+            <column name="ds_nome_empresarial" type="varchar(200)"/>
+            <column name="co_endereco_correspondencia" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                constraintName="fk_destinatario_endereco_correspondencia"
+                baseTableName="tb_destinatario" baseColumnNames="co_endereco_correspondencia"
+                referencedTableName="tb_endereco_correspondencia" referencedColumnNames="id_endereco_correspondencia"
+                baseTableSchemaName="destinacao" referencedTableSchemaName="destinacao" />
+    </changeSet>
+
+    <changeSet id="7.09.09" author="rogerio.feitoza">
+
+        <addColumn schemaName="destinacao"
+                   tableName="tb_telefone">
+            <column name="co_destinatario" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                baseTableSchemaName="destinacao"
+                referencedTableSchemaName="destinacao"
+                baseTableName="tb_telefone"
+                baseColumnNames="co_destinatario"
+                constraintName="fk_telefone_destinatario"
+                referencedTableName="tb_destinatario"
+                referencedColumnNames="id_destinatario"/>
+    </changeSet>
+
+    <changeSet id="7.09.10" author="rogerio.feitoza">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_destinatario" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn tableName="tb_destinatario" schemaName="destinacao">
+            <column name="ds_autarquia_fundacao" type="varchar(200)"/>
+        </addColumn>
+
+
+    </changeSet>
+
+
+</databaseChangeLog>

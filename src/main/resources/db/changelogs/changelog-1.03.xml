@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.03.01" author="guilherme.ozaka">
+        <createTable schemaName="destinacao" tableName="tb_tipo_modalidade">
+            <column name="id_tipo_modalidade" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_modalidade" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.03.02" author="guilherme.ozaka">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_modalidade" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_modalidade" schemaName="destinacao">
+            <column name="id_tipo_modalidade" value="1"/>
+            <column name="ds_tipo_modalidade" value="Individual"/>
+        </insert>
+
+        <insert tableName="tb_tipo_modalidade" schemaName="destinacao">
+            <column name="id_tipo_modalidade" value="2"/>
+            <column name="ds_tipo_modalidade" value="Coletivo"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.03.03" author="gustavo.dias">
+        <createTable schemaName="destinacao" tableName="tb_tipo_concessao">
+            <column name="id_tipo_concessao" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_concessao" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.03.04" author="gustavo.dias">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_concessao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_concessao" schemaName="destinacao">
+            <column name="id_tipo_concessao" value="1"/>
+            <column name="ds_tipo_concessao" value="Gratuito"/>
+        </insert>
+
+        <insert tableName="tb_tipo_concessao" schemaName="destinacao">
+            <column name="id_tipo_concessao" value="2"/>
+            <column name="ds_tipo_concessao" value="Oneroso"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.03.05" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_cuem" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_cuem">
+            <column name="id_cuem" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_tipo_modalidade" type="bigint"/>
+            <column name="co_contrato" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_cuem"
+                baseColumnNames="co_contrato"
+                constraintName="fk_contrato"
+                referencedTableName="tb_contrato"
+                referencedColumnNames="id_contrato"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_cuem"
+                baseColumnNames="co_tipo_modalidade"
+                constraintName="fk_tipo_modalidade"
+                referencedTableName="tb_tipo_modalidade"
+                referencedColumnNames="id_tipo_modalidade"/>
+
+    </changeSet>
+
+    <changeSet id="1.03.06" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_responsavel" schemaName="destinacao"/>
+        </preConditions>
+        <addColumn schemaName="destinacao" tableName="tb_responsavel">
+            <column name="ic_regime_coletivo_cnpj" type="boolean"/>
+        </addColumn>
+        <addColumn schemaName="destinacao" tableName="tb_responsavel">
+            <column name="ds_nome_entidade" type="varchar(150)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1.03.07" author="diego.alves">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_familia_beneficiada" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_familia_beneficiada">
+            <column name="id_familia_beneficiada" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="nu_sequencial" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_nome_responsavel" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_cpf_responsavel" type="varchar(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ds_nome_conjuge" type="varchar(150)"/>
+            <column name="ds_cpf_conjuge" type="varchar(150)"/>
+            <column name="nu_area_utilizada" type="number">
+                <constraints nullable="false"/>
+            </column>
+            <column name="co_responsavel" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_familia_beneficiada"
+                baseColumnNames="co_responsavel"
+                constraintName="fk_fam_benef_responsavel"
+                referencedTableName="tb_responsavel"
+                referencedColumnNames="id_responsavel"/>
+
+        <createSequence sequenceName="tb_familia_beneficiada_seq"
+                        schemaName="destinacao" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="1.03.08" author="gustavo.dias">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tb_cdru" schemaName="destinacao"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="destinacao" tableName="tb_cdru">
+            <column name="id_cdru" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="co_tipo_concessao" type="bigint"/>
+            <column name="co_contrato" type="bigint"/>
+            <column name="co_certidao_cartorial" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="tb_cdru"
+                baseColumnNames="co_contrato"
+                constraintName="fk_contrato"
+                referencedTableName="tb_contrato"
+                referencedColumnNames="id_contrato"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_cdru"
+                baseColumnNames="co_tipo_concessao"
+                constraintName="fk_tipo_concessao"
+                referencedTableName="tb_tipo_concessao"
+                referencedColumnNames="id_tipo_concessao"/>
+        <addForeignKeyConstraint
+                baseTableName="tb_cdru"
+                baseColumnNames="co_certidao_cartorial"
+                constraintName="fk_certidao_cartorial"
+                referencedTableName="tb_certidao_cartorial"
+                referencedColumnNames="id_certidao_cartorial"/>
+
+    </changeSet>
+
+    <changeSet id="1.03.09" author="guilherme.ozaka">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_destinacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_destinacao" schemaName="destinacao">
+            <column name="id_tipo_destinacao" value="4"/>
+            <column name="ds_tipo_destinacao" value="Cuem"/>
+        </insert>
+        <insert tableName="tb_tipo_destinacao" schemaName="destinacao">
+            <column name="id_tipo_destinacao" value="5"/>
+            <column name="ds_tipo_destinacao" value="Cdru"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.03.10" author="guilherme.ozaka">
+        <createTable schemaName="destinacao" tableName="tb_tipo_instrumento">
+            <column name="id_tipo_instrumento" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ds_tipo_instrumento" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.03.11" author="guilherme.ozaka">
+
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_tipo_instrumento" schemaName="destinacao"/>
+        </preConditions>
+
+        <insert tableName="tb_tipo_instrumento" schemaName="destinacao">
+            <column name="id_tipo_instrumento" value="1"/>
+            <column name="ds_tipo_instrumento" value="Transferência "/>
+        </insert>
+
+        <insert tableName="tb_tipo_instrumento" schemaName="destinacao">
+            <column name="id_tipo_instrumento" value="2"/>
+            <column name="ds_tipo_instrumento" value="Doação"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.03.12" author="guilherme.ozaka">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tb_doacao" schemaName="destinacao"/>
+        </preConditions>
+
+        <addColumn schemaName="destinacao" tableName="tb_doacao">
+            <column name="co_tipo_instrumento" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="tb_doacao"
+                baseColumnNames="co_tipo_instrumento"
+                constraintName="fk_tipo_instrumento"
+                referencedTableName="tb_tipo_instrumento"
+                referencedColumnNames="id_tipo_instrumento"/>
+
+    </changeSet>
+
+    <changeSet id="1.03.13" author="gustavo.dias">
+        <renameColumn newColumnName="nu_fcc" oldColumnName="nu_ffc" schemaName="destinacao" tableName="tb_financeiro"/>
+    </changeSet>
+
+    <changeSet id="1.03.14" author="guilherme.lima">
+        <modifyDataType columnName="nu_fcc"
+                        newDataType="varchar"
+                        schemaName="destinacao"
+                        tableName="tb_financeiro"/>
+    </changeSet>
+
+
+
+
+</databaseChangeLog>
